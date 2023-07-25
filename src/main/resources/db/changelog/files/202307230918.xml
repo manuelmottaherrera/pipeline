@@ -1,0 +1,24 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="createUserTable" author="manuel.motta">
+        <createSequence sequenceName="USER_SEQ" incrementBy="1" startValue="1"/>
+
+        <createTable tableName="USER">
+            <column name="ID" type="BIGINT" defaultValueSequenceNext="USER_SEQ">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="USERNAME" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="PASSWORD" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

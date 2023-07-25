@@ -1,7 +1,6 @@
+version: '3'
+
 services:
-  oracle:
-    image: 'gvenzl/oracle-xe:latest'
-    environment:
-      - 'ORACLE_PASSWORD=secret'
-    ports:
-      - '1521'
+  do_nothing_container:
+    image: alpine:latest
+    command: tail -f /dev/null

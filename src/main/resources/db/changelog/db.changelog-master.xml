@@ -1,0 +1,11 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="tag_initial" author="manuel.motta">
+        <tagDatabase tag="initial"/>
+    </changeSet>
+    <include file="files/202307230918.xml" relativeToChangelogFile="true"/>
+    <include file="files/202307230928.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>
