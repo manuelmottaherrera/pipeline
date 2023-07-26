@@ -22,6 +22,11 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
+		
+		<insert tableName="USERS">
+			<column name="USERNAME" value="admin" />
+            <column name="PASSWORD" value="admin" />
+		</insert>
 
 		<rollback>
 			<delete tableName="USERS"></delete>

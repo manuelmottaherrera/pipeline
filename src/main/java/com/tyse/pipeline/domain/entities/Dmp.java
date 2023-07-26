@@ -30,7 +30,7 @@ public class Dmp implements Serializable{
 	private Short id;
 	
 	@Column
-	private byte[] dmp;
+	private byte[] dmpFile;
 
 	@Column
     private Instant date;

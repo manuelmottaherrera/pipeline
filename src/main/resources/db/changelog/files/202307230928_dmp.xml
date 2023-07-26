@@ -14,7 +14,7 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 
-			<column name="DMP" type="BLOB">
+			<column name="DMP_FILE" type="BLOB">
 				<constraints nullable="false" />
 			</column>
 
