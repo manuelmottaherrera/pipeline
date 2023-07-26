@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tyse.pipeline.domain.entities.Dmp;
 import com.tyse.pipeline.service.DmpService;
 
 @RestController
@@ -29,8 +30,19 @@ public class DmpController {
             if (dmpFile.isEmpty()) {
                 return ResponseEntity.badRequest().body("El archivo está vacío");
             }
-            
-            return ResponseEntity.ok(dmpService.saveDmpFile(dmpFile));
+            Dmp dmpSaved = dmpService.saveDmpFile(dmpFile);
+            dmpService.changeStatus(dmpSaved, "DESCARGANDO");
+            dmpService.downloadToDmpFolder(dmpSaved);
+            dmpService.changeStatus(dmpSaved, "IMPORTANDO DMP");
+            dmpService.importDmp(dmpSaved);
+            dmpService.changeStatus(dmpSaved, "RESTAURANDO ESTADO");
+            dmpService.deleteDmpFile(dmpSaved);
+            if (dmpSaved.getExitCode() == 0) {
+            	dmpService.changeStatus(dmpSaved, "PROCESAMIENTO FINALIZADO");
+			} else {
+				dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO");
+			}
+            return ResponseEntity.ok(dmpSaved.getStatus());
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar el archivo");

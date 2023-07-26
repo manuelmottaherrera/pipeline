@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,25 +22,35 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Dmp implements Serializable{
 
 	private static final long serialVersionUID = -7823186460173679406L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dmp_sequence")
+    @SequenceGenerator(name = "dmp_sequence", sequenceName = "DMP_SEQ", allocationSize = 1)
+	@Column(name = "ID")
 	private Short id;
 	
-	@Column
 	@Lob
+	@Column(name = "DMP_FILE")
 	private byte[] dmpFile;
+	
+	@Column(name = "DMP_FILE_NAME")
+    private String dmpFileName;
 
-	@Column
-    private Instant date;
+	@Column(name = "DATE_UPLOAD")
+    private Instant dateUpload;
 
-	@Column
-    private Long idUsers;
+	@Column(name = "ID_USERS")
+    private Short idUsers;
 
-	@Column
+	@Column(name = "STATUS")
     private String status;
+	
+	@Column(name = "RESULT_IMPORT")
+    private String resultImport;
+	
+	@Column(name = "EXIT_CODE")
+    private Byte exitCode;
 }

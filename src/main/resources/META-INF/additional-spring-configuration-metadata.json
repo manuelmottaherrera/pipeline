@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "dmp.directory",
+    "type": "java.lang.String",
+    "description": "Directory where the .dmp files are to be downloaded"
+  },
+  {
+    "name": "dmp.datasource",
+    "type": "java.lang.String",
+    "description": "String conexion to oracle for imp command"
+  }
+]}
