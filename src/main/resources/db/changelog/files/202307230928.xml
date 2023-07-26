@@ -1,38 +1,47 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="createRecoveryTable" author="manuel.motta">
-        <createSequence sequenceName="RECOVERY_SEQ" incrementBy="1" startValue="1"/>
+	<changeSet id="createDmpTable" author="manuel.motta">
+		<createSequence sequenceName="DMP_SEQ"
+			incrementBy="1" startValue="1" />
 
-        <createTable tableName="RECOVERY">
-            <column name="ID" type="BIGINT" defaultValueSequenceNext="RECOVERY_SEQ">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
+		<createTable tableName="DMP">
+			<column name="ID" type="SMALLINT"
+				defaultValueSequenceNext="DMP_SEQ">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 
-            <column name="DMP" type="BLOB">
-                <constraints nullable="false"/>
-            </column>
+			<column name="DMP" type="BLOB">
+				<constraints nullable="false" />
+			</column>
 
-            <column name="DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+			<column name="DATE" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
 
-            <column name="ID_USER" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
+			<column name="ID_USERS" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
 
-            <column name="STATUS" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        
-        <addForeignKeyConstraint baseTableName="RECOVERY"
-                                     baseColumnNames="ID_USER"
-                                     referencedTableName="USER"
-                                     referencedColumnNames="ID"
-                                     constraintName="FK_RECOVERY_USER"/>
-    </changeSet>
+			<column name="STATUS" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="DMP" baseColumnNames="ID_USERS"
+			referencedTableName="USERS" referencedColumnNames="ID"
+			constraintName="FK_DMP_USER" />
+
+		<rollback>
+			<delete tableName="DMP"></delete>
+			<dropForeignKeyConstraint
+				baseTableName="DMP" />
+			<dropTable tableName="DMP"/>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>
