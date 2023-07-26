@@ -13,21 +13,27 @@
 				defaultValueSequenceNext="DMP_SEQ">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-
-			<column name="DMP_FILE" type="BLOB">
+			<column name="DMP_FILE_NAME" type="VARCHAR(100)">
 				<constraints nullable="false" />
 			</column>
 
-			<column name="DATE" type="TIMESTAMP">
+			<column name="DATE_UPLOAD" type="TIMESTAMP">
 				<constraints nullable="false" />
 			</column>
 
-			<column name="ID_USERS" type="BIGINT">
+			<column name="ID_USERS" type="SMALLINT">
 				<constraints nullable="false" />
 			</column>
 
-			<column name="STATUS" type="VARCHAR(255)">
+			<column name="STATUS" type="VARCHAR(200)">
 				<constraints nullable="false" />
+			</column>
+			
+			<column name="RESULT_IMPORT" type="VARCHAR(4000)">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE" type="TINYINT">
+				<constraints nullable="true" />
 			</column>
 		</createTable>
 
