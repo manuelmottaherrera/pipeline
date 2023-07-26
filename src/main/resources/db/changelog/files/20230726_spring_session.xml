@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="attr_byte_type" value="BLOB" dbms="db2"/>
+    <property name="attr_byte_type" value="BLOB" dbms="derby"/>
+    <property name="attr_byte_type" value="LONGVARBINARY" dbms="h2"/>
+    <property name="attr_byte_type" value="LONGVARBINARY" dbms="hsqldb"/>
+    <property name="attr_byte_type" value="BLOB" dbms="mysql"/>
+    <property name="attr_byte_type" value="BLOB" dbms="mariadb"/>
+    <property name="attr_byte_type" value="BLOB" dbms="oracle"/>
+    <property name="attr_byte_type" value="BYTEA" dbms="postgresql"/>
+    <property name="attr_byte_type" value="BLOB" dbms="sqlite"/>
+    <property name="attr_byte_type" value="IMAGE" dbms="mssql"/>
+    <property name="attr_byte_type" value="IMAGE" dbms="sybase"/>
+
+    <changeSet id="000" author="dexterxx">
+
+        <createTable tableName="spring_session">
+            <column name="primary_id" type="CHAR(36)">
+                <constraints
+                        nullable="false"
+                        primaryKey="true"
+                        primaryKeyName="spring_session_pk"
+                />
+            </column>
+            <column name="session_id" type="CHAR(36)">
+                <constraints
+                        nullable="false"
+                        unique="true"
+                        uniqueConstraintName="spring_session_ix1"
+                />
+            </column>
+            <column name="creation_time" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_access_time" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_inactive_interval" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_time" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="principal_name" type="VARCHAR(100)"/>
+        </createTable>
+
+        <createIndex tableName="spring_session" indexName="spring_session_ix2">
+            <column name="expiry_time"/>
+        </createIndex>
+
+        <createIndex tableName="spring_session" indexName="spring_session_ix3">
+            <column name="principal_name"/>
+        </createIndex>
+
+        <createTable tableName="spring_session_attributes">
+            <column name="session_primary_id" type="CHAR(36)">
+                <constraints
+                        foreignKeyName="spring_session_attributes_fk"
+                        referencedTableName="spring_session"
+                        referencedColumnNames="primary_id"
+                        deleteCascade="true"
+                        nullable="false"
+                />
+            </column>
+            <column name="attribute_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_bytes" type="${attr_byte_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                constraintName="spring_session_attributes_pk"
+                tableName="spring_session_attributes"
+                columnNames="session_primary_id, attribute_name"
+        />
+
+        <!-- AUTOROLLBACK -->
+    </changeSet>
+
+</databaseChangeLog>
