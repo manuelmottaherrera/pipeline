@@ -9,7 +9,7 @@ import com.tyse.pipeline.domain.entities.Dmp;
 public interface DmpService {
 	public Dmp saveDmpFile(MultipartFile dmpFile) throws IOException;
 
-	public void downloadToDmpFolder(Dmp dmp);
+	public void putInDmpDirectory(MultipartFile dmp);
 
 	public void deleteDmpFile(Dmp dmp);
 

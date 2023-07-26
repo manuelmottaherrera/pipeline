@@ -32,10 +32,6 @@ public class Dmp implements Serializable{
 	@Column(name = "ID")
 	private Short id;
 	
-	@Lob
-	@Column(name = "DMP_FILE")
-	private byte[] dmpFile;
-	
 	@Column(name = "DMP_FILE_NAME")
     private String dmpFileName;
 

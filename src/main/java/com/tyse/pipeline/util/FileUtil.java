@@ -3,6 +3,8 @@ package com.tyse.pipeline.util;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.tyse.pipeline.domain.entities.Dmp;
 import com.tyse.pipeline.error.DownloadDmpException;
 
@@ -11,15 +13,15 @@ public class FileUtil {
 	private FileUtil() {
 	}
 
-	public static void downloadDmp(Dmp dmp, String dmpDirectory) {
+	public static void putInDirectory(MultipartFile dmp, String dmpDirectory) {
 		try {
-			File outputFile = new File(dmpDirectory + dmp.getDmpFileName());
+			File outputFile = new File(dmpDirectory + dmp.getOriginalFilename());
 			if (outputFile.exists()) {
 				outputFile.delete();
 			}
 			FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
-			fileOutputStream.write(dmp.getDmpFile());
+			fileOutputStream.write(dmp.getBytes());
 			fileOutputStream.close();
 		} catch (Exception e) {
 			throw new DownloadDmpException("Error al descargar dmp");

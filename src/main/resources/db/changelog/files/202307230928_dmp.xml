@@ -13,10 +13,6 @@
 				defaultValueSequenceNext="DMP_SEQ">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-
-			<column name="DMP_FILE" type="BLOB">
-				<constraints nullable="false" />
-			</column>
 			<column name="DMP_FILE_NAME" type="VARCHAR(100)">
 				<constraints nullable="false" />
 			</column>

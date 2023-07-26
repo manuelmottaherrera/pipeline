@@ -32,7 +32,6 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public Dmp saveDmpFile(MultipartFile dmpFile) throws IOException {
 		Dmp dmpEntity = new Dmp();
-		dmpEntity.setDmpFile(dmpFile.getBytes());
 		dmpEntity.setDateUpload(Instant.now());
 		dmpEntity.setStatus("GUARDANDO DMP EN DB");
 		dmpEntity.setIdUsers((short) 1);
@@ -41,8 +40,8 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public void downloadToDmpFolder(Dmp dmp) {
-		FileUtil.downloadDmp(dmp, dmpDirectory);
+	public void putInDmpDirectory(MultipartFile dmp) {
+		FileUtil.putInDirectory(dmp, dmpDirectory);
 	}
 
 	@Override

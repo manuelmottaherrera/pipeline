@@ -31,8 +31,8 @@ public class DmpController {
                 return ResponseEntity.badRequest().body("El archivo está vacío");
             }
             Dmp dmpSaved = dmpService.saveDmpFile(dmpFile);
-            dmpService.changeStatus(dmpSaved, "DESCARGANDO");
-            dmpService.downloadToDmpFolder(dmpSaved);
+            dmpService.changeStatus(dmpSaved, "CREANDO REGISTRO");
+            dmpService.putInDmpDirectory(dmpFile);
             dmpService.changeStatus(dmpSaved, "IMPORTANDO DMP");
             dmpService.importDmp(dmpSaved);
             dmpService.changeStatus(dmpSaved, "RESTAURANDO ESTADO");
