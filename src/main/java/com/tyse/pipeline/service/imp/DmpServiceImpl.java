@@ -1,5 +1,6 @@
 package com.tyse.pipeline.service.imp;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 
@@ -19,10 +20,25 @@ public class DmpServiceImpl implements DmpService {
 
 	DmpRepository dmpRepository;
 
-	@Value("${dmp.directory}")
+	@Value("${pipeline.home}")
+	String home;
+
+	@Value("${pipeline.sql.generate-export}")
+	String generateExportFile;
+
+	@Value("${pipeline.sql.name-sqlite-file}")
+	String nameDefaultSqliteFile;
+
+	@Value("${pipeline.sql.script-sqlite}")
+	String initScriptSqlite;
+	
+	@Value("${pipeline.sql.directory}")
+	String sqlDirectory;
+
+	@Value("${pipeline.dmp.directory}")
 	String dmpDirectory;
 
-	@Value("${dmp.datasource}")
+	@Value("${pipeline.datasource}")
 	String datasource;
 
 	DmpServiceImpl(DmpRepository dmpRepository) {
@@ -30,17 +46,17 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public Dmp saveDmpFile(MultipartFile dmpFile) throws IOException {
+	public Dmp saveDmpFile(File dmpFile) throws IOException {
 		Dmp dmpEntity = new Dmp();
 		dmpEntity.setDateUpload(Instant.now());
 		dmpEntity.setStatus("GUARDANDO DMP EN DB");
 		dmpEntity.setIdUsers((short) 1);
-		dmpEntity.setDmpFileName(dmpFile.getOriginalFilename());
+		dmpEntity.setDmpFileName(dmpFile.getName());
 		return dmpRepository.save(dmpEntity);
 	}
 
 	@Override
-	public void putInDmpDirectory(MultipartFile dmp) {
+	public void putInDmpDirectory(File dmp) {
 		FileUtil.putInDirectory(dmp, dmpDirectory);
 	}
 
@@ -52,17 +68,60 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void importDmp(Dmp dmp) {
 		StringBuilder cmd = new StringBuilder();
-		cmd.append(ConstantsCommands.IMP).append(datasource).append(ConstantsCommands.FILE).append(dmpDirectory)
-				.append(dmp.getDmpFileName());
-		dmp.setExitCode(CommandLineExecutionUtil.executeCommand(cmd.toString(), dmp));
-		dmpRepository.updateResultImport(dmp.getId(), dmp.getResultImport());
-		dmpRepository.updateExitCode(dmp.getId(), dmp.getExitCode());
-		
+		cmd.append(ConstantsCommands.IMP).append(datasource).append(ConstantsCommands.IMP_FILE).append(dmpDirectory)
+				.append(dmp.getDmpFileName()).append(ConstantsCommands.IMP_ARGS);
+		dmp.setExitCodeDmp(CommandLineExecutionUtil.executeCommandImp(cmd.toString(), dmp));
+		dmpRepository.saveAndFlush(dmp);
+
 	}
 
 	@Override
 	public void changeStatus(Dmp dmp, String status) {
 		dmp.setStatus(status);
-		dmpRepository.updateStatus(dmp.getId(), dmp.getStatus());
+		dmpRepository.saveAndFlush(dmp);
+	}
+
+	@Override
+	public void exportToSqlite(Dmp dmp) {
+		StringBuilder cmd = new StringBuilder();
+		cmd.append(ConstantsCommands.SQLPLUS).append(datasource).append(ConstantsCommands.SQLPLUS_ARGS)
+				.append(sqlDirectory).append(generateExportFile);
+		dmp.setExitCodeSql(CommandLineExecutionUtil.executeCommand(cmd.toString(), sqlDirectory));
+		dmpRepository.saveAndFlush(dmp);
+	}
+
+	@Override
+	public void changeNameSqliteFile(Dmp dmp) {
+		StringBuilder cmd = new StringBuilder();
+		cmd.append(ConstantsCommands.renameSqliteFile(nameDefaultSqliteFile, nameSqlLite(dmp)));
+		CommandLineExecutionUtil.executeCommand(cmd.toString(), sqlDirectory);
+	}
+
+	@Override
+	public void createDbSqlite(Dmp dmp) {
+		//CommandLineExecutionUtil.executeCommand(ConstantsCommands.createSqliteDB(nameSqlLite(dmp)), sqlDirectory);
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.runInitScript(nameSqlLite(dmp), initScriptSqlite), sqlDirectory);
+	}
+
+	@Override
+	public void deleteNumberOfLastLinesSqliteFile(Dmp dmp, int numberOfLines) {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteNumberOfLines(nameSqlLite(dmp), numberOfLines),
+				sqlDirectory);
+	}
+
+	@Override
+	public void importSqlite(Dmp dmp) {
+		dmp.setExitCodeSqlite(CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameSqlLite(dmp)), sqlDirectory));
+		dmpRepository.save(dmp);
+	}
+	
+	private String nameSqlLite(Dmp dmp) {
+		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
+				.append(dmp.getDateUpload().getEpochSecond()).toString();
+	}
+
+	@Override
+	public Dmp findById(Short id) {
+		return dmpRepository.findById(id).get();
 	}
 }

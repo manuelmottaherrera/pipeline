@@ -1,12 +1,57 @@
 {"properties": [
   {
-    "name": "dmp.directory",
+    "name": "pipeline.home",
     "type": "java.lang.String",
-    "description": "Directory where the .dmp files are to be downloaded"
+    "description": "home directory for user"
   },
   {
-    "name": "dmp.datasource",
+    "name": "pipeline.directory",
+    "type": "java.lang.String",
+    "description": "Directory of util folders"
+  },
+  {
+    "name": "pipeline.datasource",
     "type": "java.lang.String",
     "description": "String conexion to oracle for imp command"
+  },
+  {
+    "name": "pipeline.dmp.directory",
+    "type": "java.lang.String",
+    "description": "Directory where .dmp files are to be downloaded"
+  },
+  {
+    "name": "pipeline.sql.directory",
+    "type": "java.lang.String",
+    "description": "Directory where .sql file will be downloaded"
+  },
+  {
+    "name": "pipeline.sql.generate-export",
+    "type": "java.lang.String",
+    "description": "File name of PL/SQL converter"
+  },
+  {
+    "name": "pipeline.sql.name-sqlite-file",
+    "type": "java.lang.String",
+    "description": "default name of sqlite file"
+  },
+  {
+    "name": "pipeline.sql.script-sqlite",
+    "type": "java.lang.String",
+    "description": "Script to run when create sqlite db"
+  },
+  {
+    "name": "pipeline.inputFolder",
+    "type": "java.lang.String",
+    "description": "Put here files to process"
+  },
+  {
+    "name": "pipeline.outputFolder",
+    "type": "java.lang.String",
+    "description": "Exit files will be put here"
+  },
+  {
+    "name": "pipeline.archiveFolder",
+    "type": "java.lang.String",
+    "description": "Directory of files processed"
   }
 ]}

@@ -13,20 +13,20 @@ public class FileUtil {
 	private FileUtil() {
 	}
 
-	public static void putInDirectory(MultipartFile dmp, String dmpDirectory) {
+	/*public static void putInDirectory(File dmp, String dmpDirectory) {
 		try {
-			File outputFile = new File(dmpDirectory + dmp.getOriginalFilename());
+			File outputFile = new File(dmpDirectory + dmp.getName());
 			if (outputFile.exists()) {
 				outputFile.delete();
 			}
 			FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
-			fileOutputStream.write(dmp.getBytes());
+			fileOutputStream.write(dmp.);
 			fileOutputStream.close();
 		} catch (Exception e) {
 			throw new DownloadDmpException("Error al descargar dmp");
 		}
-	}
+	}*/
 
 	public static void deleteDmp(Dmp dmp, String dmpDirectory) {
 		// Ruta del archivo que deseas eliminar

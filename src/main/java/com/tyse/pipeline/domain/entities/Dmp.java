@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -47,6 +46,12 @@ public class Dmp implements Serializable{
 	@Column(name = "RESULT_IMPORT")
     private String resultImport;
 	
-	@Column(name = "EXIT_CODE")
-    private Byte exitCode;
+	@Column(name = "EXIT_CODE_DMP")
+    private Byte exitCodeDmp;
+	
+	@Column(name = "EXIT_CODE_SQL")
+    private Byte exitCodeSql;
+	
+	@Column(name = "EXIT_CODE_SQLITE")
+    private Byte exitCodeSqlite;
 }
