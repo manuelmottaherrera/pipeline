@@ -38,19 +38,20 @@ public class CommandLineExecutionUtil {
 		}
 	}
 	
-	public static Byte executeCommand(String command, String homeDirectory) {
+	public static Byte executeCommand(String command, String homeDirectory, boolean verbose) {
 		try {
 			System.out.println(command);
 			ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
 			processBuilder.redirectErrorStream(true);
 			processBuilder.directory(new File(homeDirectory));
 			Process process = processBuilder.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
+			if (verbose) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					System.out.println(line);
+				}
 			}
-
 			int exitCode = process.waitFor();
 			return (byte) exitCode;
 		} catch (IOException | InterruptedException e) {
@@ -59,7 +60,7 @@ public class CommandLineExecutionUtil {
 		}
 	}
 	
-	public static Byte executeCommand(String[] command, String homeDirectory) {
+	public static Byte executeCommand(String[] command, String homeDirectory, boolean verbose) {
 		try {
 			for (String string : command) {
 				System.out.println(string + " ");
@@ -68,12 +69,13 @@ public class CommandLineExecutionUtil {
 			processBuilder.redirectErrorStream(true);
 			processBuilder.directory(new File(homeDirectory));
 			Process process = processBuilder.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
+			if (verbose) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					System.out.println(line);
+				} 
 			}
-
 			int exitCode = process.waitFor();
 			return (byte) exitCode;
 		} catch (IOException | InterruptedException e) {

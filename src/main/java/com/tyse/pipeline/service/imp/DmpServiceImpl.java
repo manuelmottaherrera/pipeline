@@ -68,7 +68,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void archiveDmpFile(Dmp dmp) {
 		CommandLineExecutionUtil
-				.executeCommand(ConstantsCommands.moveFile(inputFolder + dmp.getDmpFileName(), archiveFolder), home);
+				.executeCommand(ConstantsCommands.moveFile(inputFolder + dmp.getDmpFileName(), archiveFolder), home, true);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void exportToSqlite(Dmp dmp) {
 		dmp.setExitCodeSql(CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqlDirectory + generateExportFile), sqlDirectory));
+				ConstantsCommands.sqlPlusCommand(datasource, sqlDirectory + generateExportFile), sqlDirectory, false));
 		dmpRepository.saveAndFlush(dmp);
 	}
 
@@ -95,25 +95,25 @@ public class DmpServiceImpl implements DmpService {
 	public void changeNameSqliteFile(Dmp dmp) {
 		StringBuilder cmd = new StringBuilder();
 		cmd.append(ConstantsCommands.renameSqliteFile(nameDefaultSqliteFile, nameSqlLite(dmp)));
-		CommandLineExecutionUtil.executeCommand(cmd.toString(), sqlDirectory);
+		CommandLineExecutionUtil.executeCommand(cmd.toString(), sqlDirectory, true);
 	}
 
 	@Override
 	public void createDbSqlite(Dmp dmp) {
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.runInitScript(nameSqlLite(dmp), initScriptSqlite),
-				sqlDirectory);
+				sqlDirectory, true);
 	}
 
 	@Override
 	public void deleteNumberOfLastLinesSqliteFile(Dmp dmp, int numberOfLines) {
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteNumberOfLines(nameSqlLite(dmp), numberOfLines),
-				sqlDirectory);
+				sqlDirectory, true);
 	}
 
 	@Override
 	public void importSqlite(Dmp dmp) {
 		dmp.setExitCodeSqlite(CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameSqlLite(dmp)),
-				sqlDirectory));
+				sqlDirectory, false));
 		dmpRepository.save(dmp);
 	}
 
@@ -125,13 +125,13 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void moveDbSqlite(Dmp dmp) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.moveFile(sqlDirectory + nameSqlLite(dmp) + ".db", outputFolder), home);
+				ConstantsCommands.moveFile(sqlDirectory + nameSqlLite(dmp) + ".db", outputFolder), home, true);
 	}
 
 	@Override
 	public void deleteSqliteFile(Dmp dmpSaved) {
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteFile(sqlDirectory + nameSqlLite(dmpSaved) + ".sql"),
-				home);
+				home, true);
 	}
 
 	private String nameSqlLite(Dmp dmp) {
