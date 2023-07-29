@@ -32,7 +32,13 @@
 			<column name="RESULT_IMPORT" type="VARCHAR(4000)">
 				<constraints nullable="true" />
 			</column>
-			<column name="EXIT_CODE" type="TINYINT">
+			<column name="EXIT_CODE_DMP" type="TINYINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE_SQL" type="TINYINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE_SQLITE" type="TINYINT">
 				<constraints nullable="true" />
 			</column>
 		</createTable>
