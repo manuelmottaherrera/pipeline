@@ -2,22 +2,18 @@ package com.tyse .pipeline.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Iterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.tyse.pipeline.domain.entities.Dmp;
 import com.tyse.pipeline.service.DmpService;
 
 @RestController
-@RequestMapping("/dmp")
+@RequestMapping("/migration")
 public class DmpController {
 
 	DmpService dmpService;
@@ -26,8 +22,8 @@ public class DmpController {
 		this.dmpService = dmpService;
 	}
 
-	@PostMapping("/upload")
-	public ResponseEntity<Object> uploadFile() {
+	@PostMapping("/run-pipeline")
+	public ResponseEntity<Object> runPipeline() {
 		try {
 			for (File fileDmp : getAllDmpFiles()) {
 				convertDmpFile(fileDmp);
