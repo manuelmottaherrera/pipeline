@@ -10,9 +10,7 @@ import com.tyse.pipeline.domain.entities.Dmp;
 public interface DmpService {
 	public Dmp saveDmpFile(File dmpFile) throws IOException;
 
-	public void putInDmpDirectory(File dmp);
-
-	public void deleteDmpFile(Dmp dmp);
+	public void archiveDmpFile(Dmp dmp);
 
 	public void importDmp(Dmp dmp);
 
@@ -29,4 +27,10 @@ public interface DmpService {
 	public void importSqlite(Dmp dmp);
 
 	public Dmp findById(Short id);
+
+	public File[] getAllDmpFiles();
+
+	public void moveDbSqlite(Dmp dmpSaved);
+
+	public void deleteSqliteFile(Dmp dmpSaved);
 }

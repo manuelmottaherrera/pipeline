@@ -6,13 +6,14 @@ public class ConstantsCommands {
 	private ConstantsCommands() {
 
 	}
-
-	public static final String IMP = "/usr/lib/oracle/21/client64/bin/imp ";
-	public static final String IMP_FILE = " file=";
-	public static final String IMP_ARGS = "  fromuser=APLADMIN touser=TYSE_USER";
-
-	public static final String SQLPLUS = "sqlplus -S ";
-	public static final String SQLPLUS_ARGS = " @";
+	
+	public static final String impCommand(String datasource, String file) {
+		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=TYSE_USER";
+	}
+	
+	public static final String sqlPlusCommand(String datasource, String file) {
+		return "sqlplus -S " + datasource + " @" + file;
+	}
 
 	public static final String renameSqliteFile(String defaultName, String newName) {
 		return "mv " + defaultName + " " + newName + ".sql";
@@ -29,5 +30,13 @@ public class ConstantsCommands {
 
 	public static final String[] importSqlite(String nameFileSql) {
 		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
+	}
+	
+	public static final String[] moveFile(String absolutePathFileOrigen, String absolutePathFileFinal) {
+		return new String [] {"mv", absolutePathFileOrigen,absolutePathFileFinal };
+	}
+	
+	public static final String[] deleteFile(String absoluteFileName) {
+		return new String[] {"rm", absoluteFileName};
 	}
 }
