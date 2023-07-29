@@ -14,6 +14,7 @@ sqlplus TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE
 docker cp /home/manuel/Documents/repo/tyse/Pruebas/PruebaBio/exp_infomin00.dmp oracle-19c-sd:/opt/oracle/admin/ORCLCDB/dpdump/014620083A9B0DD2E063020011ACD71F/
 
 sqlplus -S TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE @/home/manuel/pipelineDirectory/sqlDirectory/generateExport.sql
+/usr/lib/oracle/21/client64/bin/sqlplus -S TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE @/home/manuel/pipelineDirectory/sqlDirectory/generateExport.sql
 
 
 imp APLADMIN/EqSnS2015@//172.17.0.1:1521/TYSE FULL=Y file=/opt/oracle/admin/ORCLCDB/dpdump/014620083A9B0DD2E063020011ACD71F/exp_infomin00.dmp

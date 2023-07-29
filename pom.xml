@@ -82,9 +82,9 @@
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<configuration>
-					<url>jdbc:oracle:thin:@//172.17.0.1:1521/TYSE</url>
-					<username>TYSE_USER</username>
-					<password>EqSnS2015</password>
+					<url>jdbc:oracle:thin:@//${PIPELINE_IP_DB}:${PIPELINE_PORT_DB}/${PIPELINE_SHEMA_DB}</url>
+					<username>${PIPELINE_USER_DB}</username>
+					<password>${PIPELINE_PASS_DB}</password>
 					<driver>oracle.jdbc.OracleDriver</driver>
 					<changeLogFile>/src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
 				</configuration>
