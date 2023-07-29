@@ -1,0 +1,59 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+	<changeSet id="createDmpTable" author="manuel.motta">
+		<createSequence sequenceName="DMP_SEQ"
+			incrementBy="1" startValue="1" />
+
+		<createTable tableName="DMP">
+			<column name="ID" type="SMALLINT"
+				defaultValueSequenceNext="DMP_SEQ">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="DMP_FILE_NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="DATE_UPLOAD" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="ID_USERS" type="SMALLINT">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="STATUS" type="VARCHAR(200)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="RESULT_IMPORT" type="VARCHAR(4000)">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE_DMP" type="TINYINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE_SQL" type="TINYINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="EXIT_CODE_SQLITE" type="TINYINT">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="DMP" baseColumnNames="ID_USERS"
+			referencedTableName="USERS" referencedColumnNames="ID"
+			constraintName="FK_DMP_USER" />
+
+		<rollback>
+			<delete tableName="DMP"></delete>
+			<dropForeignKeyConstraint
+				baseTableName="DMP" />
+			<dropTable tableName="DMP"/>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
