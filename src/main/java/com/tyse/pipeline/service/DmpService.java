@@ -31,4 +31,18 @@ public interface DmpService {
 	public void moveDbSqlite(Dmp dmpSaved);
 
 	public void deleteSqliteFile(Dmp dmpSaved);
+
+	public File[] getAllPlainTextFiles();
+
+	public void moveFileToSqlDirectory(File plainText);
+
+	public void importCenso(File plainText);
+
+	public void cleanSqlloaderProcess(File plainText);
+
+	public void importDivipol(File plainText);
+
+	public void importJurados(File plainText);
+
+	public void importClavePuesto(File plainText);
 }

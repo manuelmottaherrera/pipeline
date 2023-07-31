@@ -25,9 +25,8 @@ public class DmpController {
 	@PostMapping("/run-pipeline")
 	public ResponseEntity<Object> runPipeline() {
 		try {
-			for (File fileDmp : getAllDmpFiles()) {
-				convertDmpFile(fileDmp);
-			}
+			importProcess();
+			exportProcess();
 			return ResponseEntity.ok("ok");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,7 +34,62 @@ public class DmpController {
 		}
 	}
 
-	private void convertDmpFile(File dmpFile) throws IOException {
+	private void exportProcess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void importProcess() throws IOException {
+		for (File plainText : dmpService.getAllPlainTextFiles()) {
+			processFile(plainText);
+		}
+		for (File fileDmp : getAllDmpFiles()) {
+			processDmpFile(fileDmp);
+		}
+	}
+
+	private void processFile(File plainText) {
+		final String CENSO = "Censo";
+		final String DIVIPOL = "Divipol";
+		final String JURADOS = "Jurados";
+		final String CLAVE_PUESTO = "ClavePuesto";
+		String fileName = plainText.getName();
+		if (fileName.contains(CENSO)) {
+			processCenso(plainText);
+		} else if (fileName.contains(DIVIPOL)) {
+			processDivipol(plainText);
+		} else if (fileName.contains(JURADOS)) {
+			processJurados(plainText);
+		} else if (fileName.contains(CLAVE_PUESTO)) {
+			processClavePuesto(plainText);
+		}
+	}
+
+	private void processClavePuesto(File plainText) {
+		dmpService.moveFileToSqlDirectory(plainText);
+		dmpService.importClavePuesto(plainText);
+		dmpService.cleanSqlloaderProcess(plainText);
+	}
+
+	private void processJurados(File plainText) {
+		dmpService.moveFileToSqlDirectory(plainText);
+		dmpService.importJurados(plainText);
+		dmpService.cleanSqlloaderProcess(plainText);
+	}
+
+	private void processDivipol(File plainText) {
+		dmpService.moveFileToSqlDirectory(plainText);
+		dmpService.importDivipol(plainText);
+		dmpService.cleanSqlloaderProcess(plainText);
+	}
+
+	private void processCenso(File plainText) {
+		dmpService.moveFileToSqlDirectory(plainText);
+		dmpService.importCenso(plainText);
+		dmpService.cleanSqlloaderProcess(plainText);
+	}
+
+	private void processDmpFile(File dmpFile) throws IOException {
 		Dmp dmpSaved = dmpService.saveDmpFile(dmpFile);
 		dmpService.changeStatus(dmpSaved, "IMPORTANDO DMP");
 		dmpService.importDmp(dmpSaved);
@@ -43,26 +97,27 @@ public class DmpController {
 			dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO DMP");
 			return;
 		}
-		dmpService.archiveDmpFile(dmpSaved);
 		dmpService.changeStatus(dmpSaved, "RESTAURANDO ESTADO");
-		dmpService.changeStatus(dmpSaved, "EXPORTANDO A FORMATO SQLITE");
-		dmpService.exportToSqlite(dmpSaved);
-		if (dmpSaved.getExitCodeSql() != 0) {
-			dmpService.changeStatus(dmpSaved, "ERROR GENERANDO SQLITE FILE");
-			return;
-		}
-		dmpService.changeStatus(dmpSaved, "PREPARANDO ARCHIVO SQLITE");
-		dmpService.changeNameSqliteFile(dmpSaved);
-		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
-		dmpService.createDbSqlite(dmpSaved);
-		dmpService.changeStatus(dmpSaved, "IMPORTANDO A SQLITE");
-		dmpService.importSqlite(dmpSaved);
-		if (dmpSaved.getExitCodeSqlite() != 0) {
-			dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO SQLITE");
-			return;
-		}
-		dmpService.deleteSqliteFile(dmpSaved);
-		dmpService.moveDbSqlite(dmpSaved);
+		dmpService.archiveDmpFile(dmpSaved);
+		dmpService.changeStatus(dmpSaved, "IMPORTACION FINALIZADA");
+//		dmpService.changeStatus(dmpSaved, "EXPORTANDO A FORMATO SQLITE");
+//		dmpService.exportToSqlite(dmpSaved);
+//		if (dmpSaved.getExitCodeSql() != 0) {
+//			dmpService.changeStatus(dmpSaved, "ERROR GENERANDO SQLITE FILE");
+//			return;
+//		}
+//		dmpService.changeStatus(dmpSaved, "PREPARANDO ARCHIVO SQLITE");
+//		dmpService.changeNameSqliteFile(dmpSaved);
+//		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
+//		dmpService.createDbSqlite(dmpSaved);
+//		dmpService.changeStatus(dmpSaved, "IMPORTANDO A SQLITE");
+//		dmpService.importSqlite(dmpSaved);
+//		if (dmpSaved.getExitCodeSqlite() != 0) {
+//			dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO SQLITE");
+//			return;
+//		}
+//		dmpService.deleteSqliteFile(dmpSaved);
+//		dmpService.moveDbSqlite(dmpSaved);
 	}
 
 	private File[] getAllDmpFiles() {

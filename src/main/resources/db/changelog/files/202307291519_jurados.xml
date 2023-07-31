@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="createJuradosTable" author="manuel.motta">
+        <createTable tableName="JURADOS">
+            <column name="CEDULA" type="NUMBER">
+                <constraints nullable="false" />
+            </column>
+            <column name="APELLIDOS" type="VARCHAR(60)">
+                <constraints nullable="false" />
+            </column>
+            <column name="NOMBRES" type="VARCHAR(60)">
+                <constraints nullable="false" />
+            </column>
+            <column name="NIVEL" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PARTIDO" type="CHAR(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="ZONA" type="CHAR(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PUESTO" type="CHAR(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="JURADO" type="NUMBER(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MESA" type="CHAR(3)">
+                <constraints nullable="true" />
+            </column>
+            <column name="CARGO" type="CHAR(2)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="CEDULA" constraintName="JURADOS_IDX1" tableName="JURADOS" />
+    </changeSet>
+
+</databaseChangeLog>

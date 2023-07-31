@@ -1,0 +1,51 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="createCensoTable" author="manuel.motta">
+        <createTable tableName="CENSO">
+            <column name="DEPARTAMENTO" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MUNICIPIO" type="NUMBER(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="ZONA" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PUESTO" type="CHAR(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="DEPARTAMENTO_NOMBRE" type="VARCHAR2(400)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MUNICIPIO_NOMBRE" type="VARCHAR2(400)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PUESTO_DESCRIPCION" type="VARCHAR2(400)">
+                <constraints nullable="false" />
+            </column>
+            <column name="DIRECCION" type="VARCHAR2(400)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MESA" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="CEDULA" type="NUMBER(12)">
+                <constraints nullable="false" />
+            </column>
+            <column name="FECHA_CENSO" type="VARCHAR2(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PRIMER_APELLIDO" type="VARCHAR2(80)" />
+            <column name="SEGUNDO_APELLIDO" type="VARCHAR2(80)" />
+            <column name="PRIMER_NOMBRE" type="VARCHAR2(80)" />
+            <column name="SEGUNDO_NOMBRE" type="VARCHAR2(80)" />
+            <column name="GENERO" type="NUMBER(1)" />
+            <column name="FECHA_EXPEDICION" type="VARCHAR2(30)" />
+        </createTable>
+        <addPrimaryKey columnNames="CEDULA" constraintName="CENSO_PK" tableName="CENSO" />
+    </changeSet>
+
+</databaseChangeLog>

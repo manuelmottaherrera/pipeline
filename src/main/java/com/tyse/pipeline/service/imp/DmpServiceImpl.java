@@ -46,8 +46,25 @@ public class DmpServiceImpl implements DmpService {
 	@Value("${pipeline.outputFolder}")
 	String outputFolder;
 
+	@Value("${pipeline.sql.sqlldr.censo}")
+	String censoCtl;
+
+	@Value("${pipeline.sql.sqlldr.divipol}")
+	String divipolCtl;
+
+	@Value("${pipeline.sql.sqlldr.jurados}")
+	String juradosCtl;
+
+	@Value("${pipeline.sql.sqlldr.clave-puesto}")
+	String clavePuestoCtl;
+	
 	DmpServiceImpl(DmpRepository dmpRepository) {
 		this.dmpRepository = dmpRepository;
+	}
+
+	@Override
+	public File[] getAllPlainTextFiles() {
+		return FileUtil.getFilesFromFolder(inputFolder, ".txt");
 	}
 
 	@Override
@@ -67,8 +84,8 @@ public class DmpServiceImpl implements DmpService {
 
 	@Override
 	public void archiveDmpFile(Dmp dmp) {
-		CommandLineExecutionUtil
-				.executeCommand(ConstantsCommands.moveFile(inputFolder + dmp.getDmpFileName(), archiveFolder), home, true);
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.moveFile(inputFolder + dmp.getDmpFileName(), archiveFolder), home, true);
 	}
 
 	@Override
@@ -111,10 +128,42 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
+	public void cleanSqlloaderProcess(File plainText) {
+		String[] fileName = plainText.getName().split("\\.");
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(plainText.getName(), archiveFolder),
+				sqlDirectory, true);
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteFile(fileName[0] + ".*"), sqlDirectory, false);
+	}
+
+	@Override
 	public void importSqlite(Dmp dmp) {
 		dmp.setExitCodeSqlite(CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameSqlLite(dmp)),
 				sqlDirectory, false));
 		dmpRepository.save(dmp);
+	}
+
+	@Override
+	public void importCenso(File plainText) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlldrCommand(datasource, censoCtl, plainText.getName()), sqlDirectory, false);
+	}
+
+	@Override
+	public void importDivipol(File plainText) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlldrCommand(datasource, divipolCtl, plainText.getName()), sqlDirectory, false);
+	}
+
+	@Override
+	public void importJurados(File plainText) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlldrCommand(datasource, juradosCtl, plainText.getName()), sqlDirectory, false);
+	}
+	
+	@Override
+	public void importClavePuesto(File plainText) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlldrCommand(datasource, clavePuestoCtl, plainText.getName()), sqlDirectory, false);
 	}
 
 	@Override
@@ -129,13 +178,20 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public void deleteSqliteFile(Dmp dmpSaved) {
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteFile(sqlDirectory + nameSqlLite(dmpSaved) + ".sql"),
+	public void moveFileToSqlDirectory(File file) {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(inputFolder + file.getName(), sqlDirectory),
 				home, true);
+	}
+
+	@Override
+	public void deleteSqliteFile(Dmp dmpSaved) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.deleteFile(sqlDirectory + nameSqlLite(dmpSaved) + ".sql"), home, true);
 	}
 
 	private String nameSqlLite(Dmp dmp) {
 		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
 				.append(dmp.getDateUpload().getEpochSecond()).toString();
 	}
+
 }

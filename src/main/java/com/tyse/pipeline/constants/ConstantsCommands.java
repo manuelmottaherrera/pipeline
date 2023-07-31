@@ -11,6 +11,10 @@ public class ConstantsCommands {
 		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=TYSE_USER";
 	}
 	
+	public static final String sqlldrCommand(String datasource, String ctlFile, String fileName) {
+		return "sqlldr " + datasource + " control=" + ctlFile + " data=" + fileName;
+	}
+	
 	public static final String sqlPlusCommand(String datasource, String file) {
 		return "sqlplus -S " + datasource + " @" + file;
 	}

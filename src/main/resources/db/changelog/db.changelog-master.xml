@@ -8,5 +8,9 @@
     </changeSet>
 <!--     <include file="files/20230726_spring_session.xml" relativeToChangelogFile="true"/> -->
     <include file="files/202307230918_users.xml" relativeToChangelogFile="true"/>
-    <include file="files/202307230928_dmp.xml" relativeToChangelogFile="true"/> 
+    <include file="files/202307230928_dmp.xml" relativeToChangelogFile="true"/>
+    <include file="files/202307291519_jurados.xml" relativeToChangelogFile="true"/>
+    <include file="files/202307291658_divipol.xml" relativeToChangelogFile="true"/>
+    <include file="files/202307300943_censo.xml" relativeToChangelogFile="true"/>
+    <include file="files/202307310115_clave_puesto.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

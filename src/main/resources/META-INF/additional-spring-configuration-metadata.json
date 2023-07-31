@@ -53,5 +53,25 @@
     "name": "pipeline.archiveFolder",
     "type": "java.lang.String",
     "description": "Directory of files processed"
+  },
+  {
+    "name": "pipeline.sql.sqlldr.censo",
+    "type": "java.lang.String",
+    "description": "Name of .ctl for import censo data"
+  },
+  {
+    "name": "pipeline.sql.sqlldr.divipol",
+    "type": "java.lang.String",
+    "description": "Name of .ctl for import divipol data"
+  },
+  {
+    "name": "pipeline.sql.sqlldr.jurados",
+    "type": "java.lang.String",
+    "description": "Name of .ctl for import jurados data"
+  },
+  {
+    "name": "pipeline.sql.sqlldr.clave-puesto",
+    "type": "java.lang.String",
+    "description": "Name of .ctl for import clave puesto data"
   }
 ]}
