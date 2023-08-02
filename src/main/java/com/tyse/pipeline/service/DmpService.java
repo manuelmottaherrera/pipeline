@@ -14,7 +14,7 @@ public interface DmpService {
 
 	public void changeStatus(Dmp dmp, String status);
 
-	public void exportToSqlite(Dmp dmp);
+	public void exportToSqlite();
 
 	public void changeNameSqliteFile(Dmp dmp);
 
@@ -22,7 +22,7 @@ public interface DmpService {
 
 	public void deleteNumberOfLastLinesSqliteFile(Dmp dmp, int numberOfLines);
 
-	public void importSqlite(Dmp dmp);
+	public void importSqlite(String nameFile);
 
 	public Dmp findById(Short id);
 
@@ -30,7 +30,7 @@ public interface DmpService {
 
 	public void moveDbSqlite(Dmp dmpSaved);
 
-	public void deleteSqliteFile(Dmp dmpSaved);
+	public void deleteSqlFile(String fileName);
 
 	public File[] getAllPlainTextFiles();
 
@@ -45,4 +45,10 @@ public interface DmpService {
 	public void importJurados(File plainText);
 
 	public void importClavePuesto(File plainText);
+
+	public void generateDbSqlite();
+
+	public void deleteAllOfOutputDirectory();
+
+	public void moveAllDbFolderToOutputFolder();
 }

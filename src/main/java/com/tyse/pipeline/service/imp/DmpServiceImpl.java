@@ -22,9 +22,12 @@ public class DmpServiceImpl implements DmpService {
 	@Value("${pipeline.home}")
 	String home;
 
-	@Value("${pipeline.sql.generate-export}")
-	String generateExportFile;
-
+	@Value("${pipeline.sqlite.generate}")
+	String generatePlSql;
+	
+	@Value("${pipeline.sqlite.generate-sqlite-files}")
+	String generateSqliteFiles;
+	
 	@Value("${pipeline.sql.name-sqlite-file}")
 	String nameDefaultSqliteFile;
 
@@ -33,6 +36,12 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.sql.directory}")
 	String sqlDirectory;
+	
+	@Value("${pipeline.sqlite.directory}")
+	String sqliteDirectory;
+	
+	@Value("${pipeline.sqlite.directory-db}")
+	String sqliteDirectoryDb;
 
 	@Value("${pipeline.datasource}")
 	String datasource;
@@ -102,10 +111,11 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public void exportToSqlite(Dmp dmp) {
-		dmp.setExitCodeSql(CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqlDirectory + generateExportFile), sqlDirectory, false));
-		dmpRepository.saveAndFlush(dmp);
+	public void exportToSqlite() {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, false);
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory, true);
 	}
 
 	@Override
@@ -136,10 +146,9 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public void importSqlite(Dmp dmp) {
-		dmp.setExitCodeSqlite(CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameSqlLite(dmp)),
-				sqlDirectory, false));
-		dmpRepository.save(dmp);
+	public void importSqlite(String nameFile) {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameFile.split("\\.")[0]),
+				sqliteDirectoryDb, true);
 	}
 
 	@Override
@@ -184,14 +193,33 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
-	public void deleteSqliteFile(Dmp dmpSaved) {
+	public void deleteSqlFile(String fileName) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.deleteFile(sqlDirectory + nameSqlLite(dmpSaved) + ".sql"), home, true);
+				ConstantsCommands.deleteFile(fileName), sqliteDirectoryDb, true);
 	}
 
 	private String nameSqlLite(Dmp dmp) {
 		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
 				.append(dmp.getDateUpload().getEpochSecond()).toString();
 	}
+
+	@Override
+	public void generateDbSqlite() {
+		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql")) {
+			importSqlite(file.getName());
+			deleteSqlFile(file.getName());
+		}
+	}
+
+	@Override
+	public void deleteAllOfOutputDirectory() {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteAllContentInFolder(outputFolder), home, true);
+		
+	}
+
+	@Override
+	public void moveAllDbFolderToOutputFolder() {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + "*", outputFolder), home, true);
+	}	
 
 }

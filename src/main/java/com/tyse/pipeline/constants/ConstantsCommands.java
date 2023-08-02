@@ -16,7 +16,7 @@ public class ConstantsCommands {
 	}
 	
 	public static final String sqlPlusCommand(String datasource, String file) {
-		return "sqlplus -S " + datasource + " @" + file;
+		return "sqlplus " + datasource + " @" + file;
 	}
 
 	public static final String renameSqliteFile(String defaultName, String newName) {
@@ -42,5 +42,13 @@ public class ConstantsCommands {
 	
 	public static final String[] deleteFile(String absoluteFileName) {
 		return new String[] {"rm", absoluteFileName};
+	}
+	
+	public static final String deleteAllContentInFolder(String absoluteFolder) {
+		return "rm " + absoluteFolder + "*";
+	}
+	
+	public static final String MoveAllContentInFolder(String sourceFolder, String destinationFolder) {
+		return "mv " + sourceFolder + "* " + destinationFolder;
 	}
 }
