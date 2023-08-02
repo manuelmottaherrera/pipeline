@@ -35,7 +35,22 @@ public class DmpController {
 	}
 
 	private void exportProcess() {
-		// TODO Auto-generated method stub
+		dmpService.exportToSqlite();
+		dmpService.generateDbSqlite();
+		//dmpService.deleteSqlFiles();
+		dmpService.deleteAllOfOutputDirectory();
+		dmpService.moveAllDbFolderToOutputFolder();
+//		dmpService.changeNameSqliteFile(dmpSaved);
+//		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
+//		dmpService.createDbSqlite(dmpSaved);
+//		dmpService.changeStatus(dmpSaved, "IMPORTANDO A SQLITE");
+//		dmpService.importSqlite(dmpSaved);
+//		if (dmpSaved.getExitCodeSqlite() != 0) {
+//			dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO SQLITE");
+//			return;
+//		}
+//		dmpService.deleteSqliteFile(dmpSaved);
+//		dmpService.moveDbSqlite(dmpSaved);
 		
 	}
 
@@ -100,24 +115,6 @@ public class DmpController {
 		dmpService.changeStatus(dmpSaved, "RESTAURANDO ESTADO");
 		dmpService.archiveDmpFile(dmpSaved);
 		dmpService.changeStatus(dmpSaved, "IMPORTACION FINALIZADA");
-//		dmpService.changeStatus(dmpSaved, "EXPORTANDO A FORMATO SQLITE");
-//		dmpService.exportToSqlite(dmpSaved);
-//		if (dmpSaved.getExitCodeSql() != 0) {
-//			dmpService.changeStatus(dmpSaved, "ERROR GENERANDO SQLITE FILE");
-//			return;
-//		}
-//		dmpService.changeStatus(dmpSaved, "PREPARANDO ARCHIVO SQLITE");
-//		dmpService.changeNameSqliteFile(dmpSaved);
-//		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
-//		dmpService.createDbSqlite(dmpSaved);
-//		dmpService.changeStatus(dmpSaved, "IMPORTANDO A SQLITE");
-//		dmpService.importSqlite(dmpSaved);
-//		if (dmpSaved.getExitCodeSqlite() != 0) {
-//			dmpService.changeStatus(dmpSaved, "ERROR IMPORTANDO SQLITE");
-//			return;
-//		}
-//		dmpService.deleteSqliteFile(dmpSaved);
-//		dmpService.moveDbSqlite(dmpSaved);
 	}
 
 	private File[] getAllDmpFiles() {

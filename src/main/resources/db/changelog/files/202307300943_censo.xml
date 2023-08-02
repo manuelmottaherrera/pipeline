@@ -14,7 +14,7 @@
             <column name="ZONA" type="NUMBER(2)">
                 <constraints nullable="false" />
             </column>
-            <column name="PUESTO" type="CHAR(2)">
+            <column name="PUESTO" type="NUMBER(3)">
                 <constraints nullable="false" />
             </column>
             <column name="DEPARTAMENTO_NOMBRE" type="VARCHAR2(400)">

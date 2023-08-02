@@ -25,11 +25,6 @@
     "description": "Directory where .sql file will be downloaded"
   },
   {
-    "name": "pipeline.sql.generate-export",
-    "type": "java.lang.String",
-    "description": "File name of PL/SQL converter"
-  },
-  {
     "name": "pipeline.sql.name-sqlite-file",
     "type": "java.lang.String",
     "description": "default name of sqlite file"
@@ -73,5 +68,25 @@
     "name": "pipeline.sql.sqlldr.clave-puesto",
     "type": "java.lang.String",
     "description": "Name of .ctl for import clave puesto data"
+  },
+  {
+    "name": "pipeline.sqlite.directory",
+    "type": "java.lang.String",
+    "description": "sqlite folder"
+  },
+  {
+    "name": "pipeline.sqlite.generate",
+    "type": "java.lang.String",
+    "description": "File to generate PL/SQL general function"
+  },
+  {
+    "name": "pipeline.sqlite.generate-sqlite-files",
+    "type": "java.lang.String",
+    "description": "PL/SQL to generate .sql for sqlite"
+  },
+  {
+    "name": "pipeline.sqlite.directory-db",
+    "type": "java.lang.String",
+    "description": ".db will be here"
   }
 ]}
