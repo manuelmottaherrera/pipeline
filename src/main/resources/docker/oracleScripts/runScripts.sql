@@ -28,7 +28,7 @@ exp TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE file=/home/manuel/pipelineDirecto
 imp TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE file=/home/manuel/pipelineDirectory/sqlDirectory/export.dmp fromuser=TYSE_USER touser=TYSE_USER show=y > /home/manuel/pipelineDirectory/sqlDirectory/export.sql
 imp TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE file=/home/manuel/Documents/repo/tyse/Pruebas/PruebaBio/exp_infomin00.dmp fromuser=APLADMIN touser=TYSE_USER show=y > /home/manuel/pipelineDirectory/sqlDirectory/export.sql
 
-
+sqlldr TYSE_USER/EqSnS2015@//172.17.0.1:1521/TYSE control=censo.ctl data=censo.txt
 
 
 sqlite3 APLADMIN.db

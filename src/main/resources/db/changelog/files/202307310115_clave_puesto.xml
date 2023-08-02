@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="createClavePuestoTable" author="manuel.motta">
+        <createTable tableName="CLAVE_PUESTO">
+            <column name="CARGO_NOMBRE" type="VARCHAR(60)">
+                <constraints nullable="false" />
+            </column>
+            <column name="CEDULA" type="NUMBER">
+                <constraints nullable="false" />
+            </column>
+            <column name="CLAVE_PUESTO" type="CHAR(9)">
+                <constraints nullable="false" />
+            </column>
+            <column name="CARGO" type="CHAR(2)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="CEDULA" constraintName="CLAVE_PUESTO_IDX1" tableName="CLAVE_PUESTO" />
+    </changeSet>
+
+</databaseChangeLog>

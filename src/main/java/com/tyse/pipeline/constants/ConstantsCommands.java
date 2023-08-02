@@ -11,8 +11,12 @@ public class ConstantsCommands {
 		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=TYSE_USER";
 	}
 	
+	public static final String sqlldrCommand(String datasource, String ctlFile, String fileName) {
+		return "sqlldr " + datasource + " control=" + ctlFile + " data=" + fileName;
+	}
+	
 	public static final String sqlPlusCommand(String datasource, String file) {
-		return "sqlplus -S " + datasource + " @" + file;
+		return "sqlplus " + datasource + " @" + file;
 	}
 
 	public static final String renameSqliteFile(String defaultName, String newName) {
@@ -38,5 +42,13 @@ public class ConstantsCommands {
 	
 	public static final String[] deleteFile(String absoluteFileName) {
 		return new String[] {"rm", absoluteFileName};
+	}
+	
+	public static final String deleteAllContentInFolder(String absoluteFolder) {
+		return "rm " + absoluteFolder + "*";
+	}
+	
+	public static final String MoveAllContentInFolder(String sourceFolder, String destinationFolder) {
+		return "mv " + sourceFolder + "* " + destinationFolder;
 	}
 }
