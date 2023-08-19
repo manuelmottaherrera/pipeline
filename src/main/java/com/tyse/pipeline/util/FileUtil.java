@@ -3,6 +3,12 @@ package com.tyse.pipeline.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,4 +50,31 @@ public class FileUtil {
 			}
 		});
 	}
+
+	public static boolean exist(String path) {
+		return Files.exists(Paths.get(path));
+	}
+
+	public static void createDirectory(String path) {
+		try {
+			Files.createDirectories(Paths.get(path));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+	public static void moveAll(String origenDirectorio, String destinoDirectorio) {
+        Path origenPath = Paths.get(origenDirectorio);
+        Path destinoPath = Paths.get(destinoDirectorio);
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(origenPath)) {
+            for (Path path : stream) {
+                Path destino = destinoPath.resolve(origenPath.relativize(path));
+                Files.move(path, destino, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

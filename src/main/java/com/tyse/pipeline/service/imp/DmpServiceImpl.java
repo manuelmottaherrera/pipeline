@@ -3,8 +3,10 @@ package com.tyse.pipeline.service.imp;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.tyse.pipeline.constants.ConstantsCommands;
@@ -16,6 +18,10 @@ import com.tyse.pipeline.util.FileUtil;
 
 @Service
 public class DmpServiceImpl implements DmpService {
+	
+	int startImport;
+	
+	int finishImport;
 
 	DmpRepository dmpRepository;
 
@@ -67,6 +73,16 @@ public class DmpServiceImpl implements DmpService {
 	@Value("${pipeline.sql.sqlldr.clave-puesto}")
 	String clavePuestoCtl;
 	
+	@Override
+	public int getFinishImport() {
+		return finishImport;
+	}
+
+	@Override
+	public int getStartImport() {
+		return startImport;
+	}
+
 	DmpServiceImpl(DmpRepository dmpRepository) {
 		this.dmpRepository = dmpRepository;
 	}
@@ -146,9 +162,20 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
+	@Async
 	public void importSqlite(String nameFile) {
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameFile.split("\\.")[0]),
+		startImport = getStartImport() + 1;
+		String nameWithoutExtension = nameFile.split("\\.")[0];
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
 				sqliteDirectoryDb, true);
+		deleteSqlFile(nameFile);
+		compressSqliteFile(nameWithoutExtension + ".db");
+		deleteSqlFile(nameWithoutExtension + ".db");
+		finishImport = getFinishImport() + 1;
+	}
+	
+	private void compressSqliteFile(String nameFile) {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.compressFile(nameFile), sqliteDirectoryDb, true);
 	}
 
 	@Override
@@ -202,24 +229,30 @@ public class DmpServiceImpl implements DmpService {
 		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
 				.append(dmp.getDateUpload().getEpochSecond()).toString();
 	}
-
+	
 	@Override
-	public void generateDbSqlite() {
-		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql")) {
-			importSqlite(file.getName());
-			deleteSqlFile(file.getName());
-		}
-	}
-
-	@Override
-	public void deleteAllOfOutputDirectory() {
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteAllContentInFolder(outputFolder), home, true);
-		
+	public File[] getAllSqlFiles() {
+		return FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql");
 	}
 
 	@Override
 	public void moveAllDbFolderToOutputFolder() {
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + "*", outputFolder), home, true);
+		FileUtil.moveAll(sqliteDirectoryDb, outputFolder);
+	}
+
+	@Override
+	public void moveFilesToFolders() {
+		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".zip")) {
+			String dptoCode = file.getName().substring(0, 2);
+			String mnipioCode = file.getName().substring(2, 5);
+			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode)) {
+				FileUtil.createDirectory(sqlDirectory + dptoCode);
+			}
+			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode + "/" + mnipioCode)) {
+				FileUtil.createDirectory(sqliteDirectoryDb + dptoCode + "/" + mnipioCode);
+			}
+			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/" + mnipioCode), home, true);
+		}
 	}	
 
 }

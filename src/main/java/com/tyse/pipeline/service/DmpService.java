@@ -46,9 +46,13 @@ public interface DmpService {
 
 	public void importClavePuesto(File plainText);
 
-	public void generateDbSqlite();
-
-	public void deleteAllOfOutputDirectory();
-
 	public void moveAllDbFolderToOutputFolder();
+	
+	public File[] getAllSqlFiles();
+	
+	public int getFinishImport();
+	
+	public int getStartImport();
+
+	public void moveFilesToFolders();
 }
