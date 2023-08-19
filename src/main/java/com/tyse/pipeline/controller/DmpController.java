@@ -36,10 +36,13 @@ public class DmpController {
 
 	private void exportProcess() {
 		dmpService.exportToSqlite();
-		dmpService.generateDbSqlite();
+		for (File fileSql : dmpService.getAllSqlFiles()) {
+			dmpService.importSqlite(fileSql.getName());
+		}
+		//dmpService.generateDbSqlite();
 		//dmpService.deleteSqlFiles();
 		dmpService.deleteAllOfOutputDirectory();
-		dmpService.moveAllDbFolderToOutputFolder();
+		//dmpService.moveAllDbFolderToOutputFolder();
 //		dmpService.changeNameSqliteFile(dmpSaved);
 //		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
 //		dmpService.createDbSqlite(dmpSaved);

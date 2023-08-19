@@ -48,7 +48,11 @@ public class ConstantsCommands {
 		return "rm " + absoluteFolder + "*";
 	}
 	
-	public static final String MoveAllContentInFolder(String sourceFolder, String destinationFolder) {
+	public static final String moveAllContentInFolder(String sourceFolder, String destinationFolder) {
 		return "mv " + sourceFolder + "* " + destinationFolder;
+	}
+	
+	public static final String[] compressFile(String fileName) {
+		return new String[] {"zip", fileName.split("\\.")[0] + ".zip", fileName };
 	}
 }

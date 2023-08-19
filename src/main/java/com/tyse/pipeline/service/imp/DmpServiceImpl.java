@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.tyse.pipeline.constants.ConstantsCommands;
@@ -146,9 +147,18 @@ public class DmpServiceImpl implements DmpService {
 	}
 
 	@Override
+	@Async
 	public void importSqlite(String nameFile) {
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameFile.split("\\.")[0]),
+		String nameWithoutExtension = nameFile.split("\\.")[0];
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
 				sqliteDirectoryDb, true);
+		deleteSqlFile(nameFile);
+		compressSqliteFile(nameWithoutExtension + ".db");
+		deleteSqlFile(nameWithoutExtension + ".db");
+	}
+	
+	private void compressSqliteFile(String nameFile) {
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.compressFile(nameFile), sqliteDirectoryDb, true);
 	}
 
 	@Override
@@ -202,14 +212,12 @@ public class DmpServiceImpl implements DmpService {
 		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
 				.append(dmp.getDateUpload().getEpochSecond()).toString();
 	}
-
+	
 	@Override
-	public void generateDbSqlite() {
-		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql")) {
-			importSqlite(file.getName());
-			deleteSqlFile(file.getName());
-		}
+	public File[] getAllSqlFiles() {
+		return FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql");
 	}
+	
 
 	@Override
 	public void deleteAllOfOutputDirectory() {
