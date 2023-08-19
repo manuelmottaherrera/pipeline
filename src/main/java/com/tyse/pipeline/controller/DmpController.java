@@ -39,10 +39,25 @@ public class DmpController {
 		for (File fileSql : dmpService.getAllSqlFiles()) {
 			dmpService.importSqlite(fileSql.getName());
 		}
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		while (dmpService.getStartImport() != dmpService.getFinishImport()) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		dmpService.moveFilesToFolders();
 		//dmpService.generateDbSqlite();
 		//dmpService.deleteSqlFiles();
-		dmpService.deleteAllOfOutputDirectory();
-		//dmpService.moveAllDbFolderToOutputFolder();
+		//dmpService.deleteAllOfOutputDirectory();
+		dmpService.moveAllDbFolderToOutputFolder();
 //		dmpService.changeNameSqliteFile(dmpSaved);
 //		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
 //		dmpService.createDbSqlite(dmpSaved);
