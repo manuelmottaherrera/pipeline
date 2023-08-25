@@ -88,5 +88,10 @@
     "name": "pipeline.sqlite.directory-db",
     "type": "java.lang.String",
     "description": ".db will be here"
+  },
+  {
+    "name": "pipeline.user-db",
+    "type": "java.lang.String",
+    "description": "A description for 'pipeline.user-db'"
   }
 ]}

@@ -73,6 +73,9 @@ public class DmpServiceImpl implements DmpService {
 	@Value("${pipeline.sql.sqlldr.clave-puesto}")
 	String clavePuestoCtl;
 	
+	@Value("${pipeline.user-db}")
+	String userDb;
+	
 	@Override
 	public int getFinishImport() {
 		return finishImport;
@@ -116,7 +119,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void importDmp(Dmp dmp) {
 		dmp.setExitCodeDmp(CommandLineExecutionUtil
-				.executeCommandImp(ConstantsCommands.impCommand(datasource, inputFolder + dmp.getDmpFileName()), dmp));
+				.executeCommandImp(ConstantsCommands.impCommand(datasource, inputFolder + dmp.getDmpFileName(), userDb), dmp));
 		dmpRepository.saveAndFlush(dmp);
 	}
 

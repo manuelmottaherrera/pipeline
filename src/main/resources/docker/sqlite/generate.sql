@@ -16,6 +16,7 @@ DECLARE
     v_file_name VARCHAR2(17);
     v_divimovil CLOB := NULL;
     v_divicons NUMBER := 0;
+    v_total_cedulas NUMBER := 0;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON');
     DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF');
@@ -26,11 +27,11 @@ BEGIN
     FOR D IN (select DISTINCT DEPARTAMENTO, DEPARTAMENTO_NOMBRE from CENSO ORDER BY DEPARTAMENTO) LOOP
         v_departamento := LPAD(D.DEPARTAMENTO, 2, '0');
         v_divicons := v_divicons + 1;
-        v_divimovil := NVL(v_divimovil, '') || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || CHR(32) || LPAD(' || D.DEPARTAMENTO || ', 3, ''0'') || CHR(32) || ''-01''  || CHR(32) || ''-1'' || CHR(32)  || ''-1'' || RPAD(''' || D.DEPARTAMENTO_NOMBRE || ''', 50, CHR(32)) || CHR(32) || ''-00001'';' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
+        v_divimovil := NVL(v_divimovil, '') || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || RPAD(' || D.DEPARTAMENTO || ', 3, CHR(32)) || RPAD(''-1'', 3, CHR(32))  || RPAD(''-1'', 2, CHR(32))  || RPAD(''-1'', 2, CHR(32)) || RPAD(''' || D.DEPARTAMENTO_NOMBRE || ''', 50, CHR(32)) || LPAD(''-1'', 6, CHR(32));' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
         FOR M IN (SELECT DISTINCT MUNICIPIO, MUNICIPIO_NOMBRE FROM CENSO WHERE DEPARTAMENTO=D.DEPARTAMENTO ORDER BY MUNICIPIO) LOOP
             v_municipio := LPAD(M.MUNICIPIO, 3, '0');
             v_divicons := v_divicons + 1;
-            v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || CHR(32) || LPAD(' || D.DEPARTAMENTO || ', 3, ''0'') || CHR(32) || LPAD(' || M.MUNICIPIO || ', 3, ''0'')  || CHR(32) || ''-1'' || CHR(32)  || ''-1'' || RPAD(''' || M.MUNICIPIO_NOMBRE || ''', 50, CHR(32)) || CHR(32) || ''-00001'';' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
+            v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || RPAD(' || D.DEPARTAMENTO || ', 3, CHR(32)) || RPAD(' || M.MUNICIPIO || ', 3, CHR(32))  || RPAD(''-1'', 2, CHR(32))  || RPAD(''-1'', 2, CHR(32)) || RPAD(''' || M.MUNICIPIO_NOMBRE || ''', 50, CHR(32)) || LPAD(''-1'', 6, CHR(32));' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
             v_file_name := 'db/' || v_departamento || v_municipio || 'c.sql';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
             DBMS_OUTPUT.PUT_LINE('DECLARE');
@@ -99,11 +100,12 @@ BEGIN
             FOR Z IN (SELECT DISTINCT ZONA FROM CENSO WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO ORDER BY ZONA) LOOP
                 v_zona := LPAD(Z.ZONA, 2, '0');
                 v_divicons := v_divicons + 1;
-                v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || CHR(32) || LPAD(' || D.DEPARTAMENTO || ', 3, ''0'') || CHR(32) || LPAD(' || M.MUNICIPIO || ', 3, ''0'')  || CHR(32) || LPAD(' || Z.ZONA ||', 2, ''0'') || CHR(32)  || ''-1'' || RPAD(''ZONA ' || v_zona || ''', 50, CHR(32)) || CHR(32) || ''-00001'';' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
+                v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || RPAD(' || D.DEPARTAMENTO || ', 3, CHR(32)) || RPAD(' || M.MUNICIPIO || ', 3, CHR(32))  || RPAD(' || Z.ZONA ||', 2, CHR(32))  || RPAD(''-1'', 2, CHR(32)) || RPAD(''ZONA ' || v_zona || ''', 50, CHR(32)) || LPAD(''-1'', 6, CHR(32));' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
                 FOR P IN (SELECT DISTINCT PUESTO, PUESTO_DESCRIPCION FROM CENSO WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO AND ZONA = Z.ZONA ORDER BY PUESTO) LOOP
                     v_puesto := LPAD(P.PUESTO, 2, '0');
                     v_divicons := v_divicons + 1;
-                    v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || CHR(32) || LPAD(' || D.DEPARTAMENTO || ', 3, ''0'') || CHR(32) || LPAD(' || M.MUNICIPIO || ', 3, ''0'')  || CHR(32) || LPAD(' || Z.ZONA ||', 2, ''0'') || CHR(32)  || LPAD(' || P.PUESTO ||', 2, ''0'') || RPAD(''' || P.PUESTO_DESCRIPCION || ''', 50, CHR(32)) || CHR(32) || ''-00001'';' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
+                    SELECT COUNT(CEDULA) INTO v_total_cedulas FROM CENSO WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO AND ZONA = Z.ZONA AND PUESTO = P.PUESTO;
+                    v_divimovil := v_divimovil || 'v_stmt := LPAD(' || v_divicons|| ', 6, ''0'') || RPAD(' || D.DEPARTAMENTO || ', 3, CHR(32)) || RPAD(' || M.MUNICIPIO || ', 3, CHR(32))  || RPAD(' || Z.ZONA ||', 2, CHR(32))  || RPAD(' || P.PUESTO ||', 2, CHR(32)) || RPAD(''' || P.PUESTO_DESCRIPCION || ''', 50, CHR(32)) || LPAD(''' || v_total_cedulas || ''', 6, ''0'');' || CHR(10) || 'DBMS_OUTPUT.PUT_LINE(v_stmt);' || CHR(10);
                     v_file_name := 'db/' || v_departamento || v_municipio || v_zona || v_puesto || 'h.sql';
                     DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
                     DBMS_OUTPUT.PUT_LINE('DECLARE');

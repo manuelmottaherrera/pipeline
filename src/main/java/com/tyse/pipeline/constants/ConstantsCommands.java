@@ -7,7 +7,7 @@ public class ConstantsCommands {
 
 	}
 	
-	public static final String impCommand(String datasource, String file) {
+	public static final String impCommand(String datasource, String file, String userDb) {
 		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=TYSE_USER";
 	}
 	
