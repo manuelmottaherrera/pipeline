@@ -8,7 +8,7 @@ public class ConstantsCommands {
 	}
 	
 	public static final String impCommand(String datasource, String file, String userDb) {
-		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=TYSE_USER";
+		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=" + userDb;
 	}
 	
 	public static final String sqlldrCommand(String datasource, String ctlFile, String fileName) {
