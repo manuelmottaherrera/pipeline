@@ -5,11 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tyse.pipeline.domain.entities.Dmp;
 import com.tyse.pipeline.error.ExecuteCommandException;
 
 public class CommandLineExecutionUtil {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutionUtil.class);
+	
 	private CommandLineExecutionUtil() {
 
 	}
@@ -25,7 +30,7 @@ public class CommandLineExecutionUtil {
 			StringBuilder response = new StringBuilder();
 			while ((line = reader.readLine()) != null) {
 				response.append(line).append("\n");
-				System.out.println(line);
+				logger.info(line);
 			}
 
 			int exitCode = process.waitFor();
@@ -34,13 +39,14 @@ public class CommandLineExecutionUtil {
 			return (byte) exitCode;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new ExecuteCommandException(e.getMessage(), e.getCause(), true, true);
 		}
 	}
 	
 	public static Byte executeCommand(String command, String homeDirectory, boolean verbose) {
 		try {
-			System.out.println(command);
+			logger.info(command);
 			ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
 			processBuilder.redirectErrorStream(true);
 			processBuilder.directory(new File(homeDirectory));
@@ -49,13 +55,14 @@ public class CommandLineExecutionUtil {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
-					System.out.println(line);
+					logger.info(line);
 				}
 			}
 			int exitCode = process.waitFor();
 			return (byte) exitCode;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new ExecuteCommandException(e.getMessage(), e.getCause(), true, true);
 		}
 	}
@@ -63,7 +70,7 @@ public class CommandLineExecutionUtil {
 	public static Byte executeCommand(String[] command, String homeDirectory, boolean verbose) {
 		try {
 			for (String string : command) {
-				System.out.println(string + " ");
+				logger.info(string + " ");
 			}
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			processBuilder.redirectErrorStream(true);
@@ -73,13 +80,14 @@ public class CommandLineExecutionUtil {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
-					System.out.println(line);
+					logger.info(line);
 				} 
 			}
 			int exitCode = process.waitFor();
 			return (byte) exitCode;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new ExecuteCommandException(e.getMessage(), e.getCause(), true, true);
 		}
 	}
