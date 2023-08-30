@@ -8,12 +8,13 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tyse.pipeline.PipelineApplication;
 import com.tyse.pipeline.domain.entities.Dmp;
 import com.tyse.pipeline.error.ExecuteCommandException;
 
 public class CommandLineExecutionUtil {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutionUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(PipelineApplication.class);
 	
 	private CommandLineExecutionUtil() {
 
