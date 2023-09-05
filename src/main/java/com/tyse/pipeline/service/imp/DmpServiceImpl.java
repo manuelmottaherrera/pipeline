@@ -132,7 +132,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void exportToSqlite() {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, false);
+				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, true);
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory, true);
 	}
@@ -247,14 +247,10 @@ public class DmpServiceImpl implements DmpService {
 	public void moveFilesToFolders() {
 		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".zip")) {
 			String dptoCode = file.getName().substring(0, 2);
-			String mnipioCode = file.getName().substring(2, 5);
 			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode)) {
 				FileUtil.createDirectory(sqlDirectory + dptoCode);
 			}
-			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode + "/" + mnipioCode)) {
-				FileUtil.createDirectory(sqliteDirectoryDb + dptoCode + "/" + mnipioCode);
-			}
-			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/" + mnipioCode), home, true);
+			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode), home, true);
 		}
 	}	
 
