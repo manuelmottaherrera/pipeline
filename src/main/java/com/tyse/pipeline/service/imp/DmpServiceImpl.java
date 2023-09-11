@@ -248,9 +248,9 @@ public class DmpServiceImpl implements DmpService {
 		for (File file : FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".zip")) {
 			String dptoCode = file.getName().substring(0, 2);
 			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode)) {
-				FileUtil.createDirectory(sqlDirectory + dptoCode);
+				FileUtil.createDirectory(sqliteDirectoryDb + dptoCode);
 			}
-			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode), home, true);
+			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/"), home, true);
 		}
 	}	
 

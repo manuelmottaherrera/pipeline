@@ -4,8 +4,6 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="createDivipolTable" author="manuel.motta">
-        <createSequence sequenceName="SEQ_DIPOCONS" incrementBy="1" startValue="1" />
-
         <createTable tableName="DIVIPOL">
             <column name="DEPARTAMENTO" type="NUMBER(2)">
                 <constraints nullable="false" />
@@ -22,15 +20,14 @@
             <column name="DESCRIPCION" type="VARCHAR2(400)">
                 <constraints nullable="false" />
             </column>
-            <column name="DIPOCONS" type="NUMBER" defaultValueSequenceNext="SEQ_DIPOCONS">
-                <constraints nullable="false" />
+            <column name="DIPOCONS" type="NUMBER">
+                <constraints nullable="true" />
             </column>
             <column name="DIRECCION" type="VARCHAR2(400)">
                 <constraints nullable="false" />
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="DIPOCONS" constraintName="PK_DIVIPOL" tableName="DIVIPOL" />
     </changeSet>
 
 </databaseChangeLog>
