@@ -10,6 +10,6 @@ TRAILING NULLCOLS
   ZONA,
   PUESTO,
   DESCRIPCION,
-  DIPOCONS "SEQ_DIPOCONS.NEXTVAL", -- Usa la secuencia para generar valores
+  DIPOCONS,
   DIRECCION
 )
