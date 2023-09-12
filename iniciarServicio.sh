@@ -1,4 +1,4 @@
-rm ~/pipelineDirectory/pipeline.*
+rm -R ~/pipelineDirectory/archiveFolder/logs
 rm -R ~/pipelineDirectory/sqlite/db/*
 mv ~/pipelineDirectory/archiveFolder/* ~/pipelineDirectory/inputFolder/
 rm -R ~/pipelineDirectory/outputFolder/*
