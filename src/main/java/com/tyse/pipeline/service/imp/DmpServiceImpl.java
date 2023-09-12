@@ -147,7 +147,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void createDbSqlite(Dmp dmp) {
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.runInitScript(nameSqlLite(dmp), initScriptSqlite),
-				sqlDirectory, true);
+				sqlDirectory, false);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class DmpServiceImpl implements DmpService {
 		startImport = getStartImport() + 1;
 		String nameWithoutExtension = nameFile.split("\\.")[0];
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
-				sqliteDirectoryDb, true);
+				sqliteDirectoryDb, false);
 		deleteSqlFile(nameFile);
 		compressSqliteFile(nameWithoutExtension + ".db");
 		deleteSqlFile(nameWithoutExtension + ".db");
