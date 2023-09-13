@@ -170,7 +170,7 @@ public class DmpServiceImpl implements DmpService {
 		startImport = getStartImport() + 1;
 		String nameWithoutExtension = nameFile.split("\\.")[0];
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
-				sqliteDirectoryDb, false);
+				sqliteDirectoryDb, true);
 		deleteSqlFile(nameFile);
 		compressSqliteFile(nameWithoutExtension + ".db");
 		deleteSqlFile(nameWithoutExtension + ".db");
