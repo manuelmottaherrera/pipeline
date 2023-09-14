@@ -88,7 +88,7 @@ DECLARE
     v_municipio VARCHAR2(3);
     v_zona VARCHAR(2);
     v_puesto VARCHAR(2);
-    v_file_name VARCHAR2(17);
+    v_file_name VARCHAR2(30);
     v_total_cedulas NUMBER := 0;
 BEGIN
     DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
@@ -207,14 +207,31 @@ ORDER BY D.DIPOCONS) LOOP');
             v_file_name := 'db/' || v_departamento || v_municipio || 'c.sql';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
             DBMS_OUTPUT.PUT_LINE('DECLARE');
-            DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(''CREATE TABLE divipol (dipocons INT,dpto INT NOT NULL DEFAULT -1,mcpio INT NOT NULL DEFAULT -1,zona INT NOT NULL DEFAULT -1, puesto VARCHAR(2) NOT NULL DEFAULT ''''-1'''', tot_cc INT NOT NULL DEFAULT -1, descripcion VARCHAR (200), direccion VARCHAR (200), PRIMARY KEY (dipocons));'');');
+            DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(''CREATE TABLE censo (dipocons_puesto INT NOT NULL,mesa INT NOT NULL,cedula BIGINT NOT NULL,pri_nombre VARCHAR (60) NOT NULL,seg_nombre VARCHAR(60),pri_apellido VARCHAR(60) NOT NULL,seg_apellido VARCHAR(60),genero VARCHAR(12),fech_exp VARCHAR(60),PRIMARY KEY (cedula),CONSTRAINT fk_censo_divipol FOREIGN KEY (dipocons_puesto)REFERENCES divipol (dipocons));'');');
+            DBMS_OUTPUT.PUT_LINE('END;');
+            DBMS_OUTPUT.PUT_LINE('/');
+            DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+            
+            
+            v_file_name := 'db/' || v_departamento || v_municipio || 'c_divipol.csv';
+            DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('DECLARE');
+            DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
+            DBMS_OUTPUT.PUT_LINE('BEGIN');
             DBMS_OUTPUT.PUT_LINE('FOR C IN (SELECT DM.DIPOCONS AS DIPOCONS, D.DEPARTAMENTO AS dpto, D.MUNICIPIO AS mcpio, D.ZONA AS zona, D.PUESTO as puesto, DM.TOT_CC AS tot_cc, D.DESCRIPCION AS descripcion, D.DIRECCION as direccion FROM DIVIPOL D JOIN DIVIMOVIL DM ON D.DEPARTAMENTO=DM.DEPARTAMENTO AND D.MUNICIPIO=DM.MUNICIPIO AND D.ZONA=DM.ZONA AND D.PUESTO=DM.PUESTO WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || M.MUNICIPIO ||') LOOP');
-            DBMS_OUTPUT.PUT_LINE('v_stmt := ''INSERT INTO divipol (dipocons, dpto, mcpio, zona, puesto, tot_cc, descripcion, direccion) VALUES (''  || c.DIPOCONS || '', '' || c.dpto || '', '' || c.mcpio || '', '' || c.zona || '', '''''' || LPAD(c.puesto, 2, ''0'') || '''''', ''''-1'''', '''''' || REPLACE(c.descripcion, '''''''', '''''''''''') || '''''', '''''' || REPLACE(c.direccion, '''''''', '''''''''''') || '''''');'';');
+            DBMS_OUTPUT.PUT_LINE('v_stmt := c.DIPOCONS || '','' || c.dpto || '','' || c.mcpio || '','' || c.zona || '','' || LPAD(c.puesto, 2, ''0'') || '','' || c.tot_cc || '','' || REPLACE(c.descripcion, '''''''', '''''''''''') || '','' || REPLACE(c.direccion, '''''''', '''''''''''');');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
             DBMS_OUTPUT.PUT_LINE('END LOOP;');
-            DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(''CREATE TABLE censo (dipocons_puesto INT NOT NULL,mesa INT NOT NULL,cedula BIGINT NOT NULL,pri_nombre VARCHAR (60) NOT NULL,seg_nombre VARCHAR(60),pri_apellido VARCHAR(60) NOT NULL,seg_apellido VARCHAR(60),genero VARCHAR(12),fech_exp VARCHAR(60),PRIMARY KEY (cedula),CONSTRAINT fk_censo_divipol FOREIGN KEY (dipocons_puesto)REFERENCES divipol (dipocons));'');');
+            DBMS_OUTPUT.PUT_LINE('END;');
+            DBMS_OUTPUT.PUT_LINE('/');
+            DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+            v_file_name := 'db/' || v_departamento || v_municipio || 'c_censo.csv';
+            DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('DECLARE');
+            DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
+            DBMS_OUTPUT.PUT_LINE('BEGIN');
             DBMS_OUTPUT.PUT_LINE('FOR c IN (SELECT 
     DISTINCT DM.DIPOCONS AS dipocons_puesto, 
     C.MESA as mesa, 
@@ -241,15 +258,15 @@ FROM CENSO C
         C.ZONA = DM.ZONA AND
         C.PUESTO = DM.PUESTO
 WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || M.MUNICIPIO || ' ORDER BY DM.DIPOCONS) LOOP');
-            DBMS_OUTPUT.PUT_LINE('v_stmt := ''INSERT INTO censo (dipocons_puesto, mesa, cedula, pri_nombre, seg_nombre, pri_apellido, seg_apellido, genero, fech_exp) VALUES (''  || c.dipocons_puesto || '', '' 
-            || c.mesa || '', '' 
-            || c.cedula || '', '''''' 
-            || REPLACE(c.pri_nombre, '''''''', '''''''''''') || '''''', '''''' 
-            || REPLACE(c.seg_nombre, '''''''', '''''''''''') || '''''', ''''''
-            || REPLACE(c.pri_apellido, '''''''', '''''''''''') || '''''', ''''''
-            || REPLACE(c.seg_apellido, '''''''', '''''''''''') || '''''', '''''' 
-            || c.genero || '''''', ''''''
-            || c.fech_exp || '''''');'';');
+            DBMS_OUTPUT.PUT_LINE('v_stmt := c.dipocons_puesto || '','' 
+            || c.mesa || '','' 
+            || c.cedula || '','' 
+            || REPLACE(c.pri_nombre, '''''''', '''''''''''') || '','' 
+            || REPLACE(c.seg_nombre, '''''''', '''''''''''') || '',''
+            || REPLACE(c.pri_apellido, '''''''', '''''''''''') || '',''
+            || REPLACE(c.seg_apellido, '''''''', '''''''''''') || '','' 
+            || c.genero || '',''
+            || c.fech_exp;');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
             DBMS_OUTPUT.PUT_LINE('END LOOP;');
             DBMS_OUTPUT.PUT_LINE('END;');

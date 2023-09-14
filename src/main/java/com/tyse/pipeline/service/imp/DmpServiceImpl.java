@@ -18,9 +18,9 @@ import com.tyse.pipeline.util.FileUtil;
 
 @Service
 public class DmpServiceImpl implements DmpService {
-	
+
 	int startImport;
-	
+
 	int finishImport;
 
 	DmpRepository dmpRepository;
@@ -30,10 +30,10 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.sqlite.generate}")
 	String generatePlSql;
-	
+
 	@Value("${pipeline.sqlite.generate-sqlite-files}")
 	String generateSqliteFiles;
-	
+
 	@Value("${pipeline.sql.name-sqlite-file}")
 	String nameDefaultSqliteFile;
 
@@ -42,10 +42,10 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.sql.directory}")
 	String sqlDirectory;
-	
+
 	@Value("${pipeline.sqlite.directory}")
 	String sqliteDirectory;
-	
+
 	@Value("${pipeline.sqlite.directory-db}")
 	String sqliteDirectoryDb;
 
@@ -72,10 +72,10 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.sql.sqlldr.clave-puesto}")
 	String clavePuestoCtl;
-	
+
 	@Value("${pipeline.user-db}")
 	String userDb;
-	
+
 	@Override
 	public int getFinishImport() {
 		return finishImport;
@@ -118,8 +118,8 @@ public class DmpServiceImpl implements DmpService {
 
 	@Override
 	public void importDmp(Dmp dmp) {
-		dmp.setExitCodeDmp(CommandLineExecutionUtil
-				.executeCommandImp(ConstantsCommands.impCommand(datasource, inputFolder + dmp.getDmpFileName(), userDb), dmp));
+		dmp.setExitCodeDmp(CommandLineExecutionUtil.executeCommandImp(
+				ConstantsCommands.impCommand(datasource, inputFolder + dmp.getDmpFileName(), userDb), dmp));
 		dmpRepository.saveAndFlush(dmp);
 	}
 
@@ -134,7 +134,8 @@ public class DmpServiceImpl implements DmpService {
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, false);
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory, true);
+				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory,
+				true);
 	}
 
 	@Override
@@ -169,14 +170,21 @@ public class DmpServiceImpl implements DmpService {
 	public void importSqlite(String nameFile) {
 		startImport = getStartImport() + 1;
 		String nameWithoutExtension = nameFile.split("\\.")[0];
-		CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
-				sqliteDirectoryDb, true);
+		if (nameWithoutExtension.endsWith("c")) {
+			CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqliteWithCsv(nameWithoutExtension),
+					sqliteDirectoryDb, true);
+			deleteSqlFile(nameWithoutExtension + "_divipol.csv");
+			deleteSqlFile(nameWithoutExtension + "_censo.csv");
+		} else {
+			CommandLineExecutionUtil.executeCommand(ConstantsCommands.importSqlite(nameWithoutExtension),
+					sqliteDirectoryDb, true);
+		}
 		deleteSqlFile(nameFile);
 		compressSqliteFile(nameWithoutExtension + ".db");
 		deleteSqlFile(nameWithoutExtension + ".db");
 		finishImport = getFinishImport() + 1;
 	}
-	
+
 	private void compressSqliteFile(String nameFile) {
 		CommandLineExecutionUtil.executeCommand(ConstantsCommands.compressFile(nameFile), sqliteDirectoryDb, true);
 	}
@@ -198,7 +206,7 @@ public class DmpServiceImpl implements DmpService {
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlldrCommand(datasource, juradosCtl, plainText.getName()), sqlDirectory, false);
 	}
-	
+
 	@Override
 	public void importClavePuesto(File plainText) {
 		CommandLineExecutionUtil.executeCommand(
@@ -224,15 +232,14 @@ public class DmpServiceImpl implements DmpService {
 
 	@Override
 	public void deleteSqlFile(String fileName) {
-		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.deleteFile(fileName), sqliteDirectoryDb, true);
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteFile(fileName), sqliteDirectoryDb, true);
 	}
 
 	private String nameSqlLite(Dmp dmp) {
 		return new StringBuilder().append(dmp.getDmpFileName().split("\\.")[0]).append("_")
 				.append(dmp.getDateUpload().getEpochSecond()).toString();
 	}
-	
+
 	@Override
 	public File[] getAllSqlFiles() {
 		return FileUtil.getFilesFromFolder(sqliteDirectoryDb, ".sql");
@@ -250,8 +257,10 @@ public class DmpServiceImpl implements DmpService {
 			if (!FileUtil.exist(sqliteDirectoryDb + dptoCode)) {
 				FileUtil.createDirectory(sqliteDirectoryDb + dptoCode);
 			}
-			CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/"), home, true);
+			CommandLineExecutionUtil.executeCommand(
+					ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/"),
+					home, true);
 		}
-	}	
+	}
 
 }

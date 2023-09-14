@@ -36,6 +36,10 @@ public class ConstantsCommands {
 		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
 	}
 	
+	public static final String[] importSqliteWithCsv(String nameFileSql) {
+		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql",".mode csv", ".import " + nameFileSql + "_divipol.csv", ".import " + nameFileSql + "_censo.csv", ".exit" };
+	}
+	
 	public static final String[] moveFile(String absolutePathFileOrigen, String absolutePathFileFinal) {
 		return new String [] {"mv", absolutePathFileOrigen,absolutePathFileFinal };
 	}
