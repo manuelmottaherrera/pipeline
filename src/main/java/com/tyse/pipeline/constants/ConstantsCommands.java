@@ -41,7 +41,7 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] moveFile(String absolutePathFileOrigen, String absolutePathFileFinal) {
-		return new String [] {"mv", absolutePathFileOrigen,absolutePathFileFinal };
+		return new String [] {"bash", "-c", "mv " + absolutePathFileOrigen + " " + absolutePathFileFinal };
 	}
 	
 	public static final String[] deleteFile(String absoluteFileName) {

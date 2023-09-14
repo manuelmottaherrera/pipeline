@@ -247,7 +247,8 @@ public class DmpServiceImpl implements DmpService {
 
 	@Override
 	public void moveAllDbFolderToOutputFolder() {
-		FileUtil.moveAll(sqliteDirectoryDb, outputFolder);
+		//FileUtil.moveAll(sqliteDirectoryDb, outputFolder);
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.moveFile(sqliteDirectoryDb + "*", outputFolder), home, false);
 	}
 
 	@Override
