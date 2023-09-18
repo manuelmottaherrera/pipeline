@@ -51,6 +51,18 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.datasource}")
 	String datasource;
+	
+	@Value("${pipeline.sql.dmpdirectory}")
+	String dmpDirectory;
+	
+	@Value("${pipeline.sql.fromclient.tablespace}")
+	String fromClientTablespace;
+	
+	@Value("${pipeline.sql.fromclient.tablespaceidx}")
+	String fromClientTablespaceIndex;
+	
+	@Value("${pipeline.sql.fromclient.user}")
+	String fromClientUser;
 
 	@Value("${pipeline.inputFolder}")
 	String inputFolder;
@@ -119,7 +131,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void importDmp(Dmp dmp) {
 		dmp.setExitCodeDmp(CommandLineExecutionUtil.executeCommandImp(
-				ConstantsCommands.impCommand(datasource, inputFolder + dmp.getDmpFileName(), userDb), dmp));
+				ConstantsCommands.impCommand(datasource, dmp.getDmpFileName(), dmpDirectory, fromClientTablespace, fromClientTablespaceIndex, fromClientUser, userDb), dmp));
 		dmpRepository.saveAndFlush(dmp);
 	}
 

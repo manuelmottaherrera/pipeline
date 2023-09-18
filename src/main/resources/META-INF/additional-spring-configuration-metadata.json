@@ -93,5 +93,25 @@
     "name": "pipeline.user-db",
     "type": "java.lang.String",
     "description": "A description for 'pipeline.user-db'"
+  },
+  {
+    "name": "pipeline.sql.dmpdirectory",
+    "type": "java.lang.String",
+    "description": "Es el nombre del directorio de oracle donde se toman los '.dmp'"
+  },
+  {
+    "name": "pipeline.sql.fromclient.tablespace",
+    "type": "java.lang.String",
+    "description": "Es el tablespace del cliente que creó el .dmp"
+  },
+  {
+    "name": "pipeline.sql.fromclient.tablespaceidx",
+    "type": "java.lang.String",
+    "description": "Tablespace de los indices del cliente que creó el .dmp"
+  },
+  {
+    "name": "pipeline.sql.fromclient.user",
+    "type": "java.lang.String",
+    "description": "Usuario propietario de los objetos del .dmp"
   }
 ]}

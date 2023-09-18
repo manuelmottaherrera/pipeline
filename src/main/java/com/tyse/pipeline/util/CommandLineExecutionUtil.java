@@ -20,9 +20,12 @@ public class CommandLineExecutionUtil {
 
 	}
 
-	public static Byte executeCommandImp(String command, Dmp dmp) {
+	public static Byte executeCommandImp(String[] command, Dmp dmp) {
 		try {
-			ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+			for (String string : command) {
+				logger.info(string + " ");
+			}
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			processBuilder.redirectErrorStream(true);
 			Process process = processBuilder.start();
 

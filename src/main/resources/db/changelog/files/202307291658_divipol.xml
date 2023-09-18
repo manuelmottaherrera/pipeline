@@ -5,6 +5,9 @@
 
     <changeSet id="createDivipolTable" author="manuel.motta">
         <createTable tableName="DIVIPOL">
+            <column name="DIPOCONS" type="NUMBER">
+                <constraints nullable="true" />
+            </column>
             <column name="DEPARTAMENTO" type="NUMBER(2)">
                 <constraints nullable="false" />
             </column>
@@ -17,13 +20,25 @@
             <column name="PUESTO" type="CHAR(2)">
                 <constraints nullable="false" />
             </column>
-            <column name="DESCRIPCION" type="VARCHAR2(400)">
+            <column name="DEPARTAMENTO_DESCRIPCION" type="VARCHAR2(50)">
                 <constraints nullable="false" />
             </column>
-            <column name="DIPOCONS" type="NUMBER">
-                <constraints nullable="true" />
+            <column name="MUNICIPIO_DESCRIPCION" type="VARCHAR2(50)">
+                <constraints nullable="false" />
             </column>
-            <column name="DIRECCION" type="VARCHAR2(400)">
+            <column name="PUESTO_DESCRIPCION" type="VARCHAR2(150)">
+                <constraints nullable="false" />
+            </column>
+            <column name="POT_HOMBRE" type="NUMBER(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="POT_MUJER" type="NUMBER(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="TOTAL" type="NUMBER(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MESAS" type="NUMBER(3)">
                 <constraints nullable="false" />
             </column>
         </createTable>

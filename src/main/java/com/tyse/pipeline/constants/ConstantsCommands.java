@@ -7,8 +7,17 @@ public class ConstantsCommands {
 
 	}
 	
-	public static final String impCommand(String datasource, String file, String userDb) {
-		return "imp " + datasource + " file=" + file + "  fromuser=APLADMIN touser=" + userDb;
+	public static final String[] impCommand(String datasource, String file, String dmpDirectory, String tablespaceClient, String tablespaceIndex, String userClient, String userDb) {
+		return new String[] {
+				"bash", "-c", //"podman exec oracle-19-3-p " + 
+				"impdp " + datasource +
+				" DUMPFILE=" + file + 
+				" directory=" + dmpDirectory + 
+				" logfile=import00.log" + 
+				" REMAP_TABLESPACE=" + tablespaceClient + ":users," + tablespaceIndex + ":users" + 
+				" REMAP_SCHEMA=" + userClient + ":" + userDb
+			};
+		//impdp adm_biometria DUMPFILE=main_dump.dmp directory=DMP_INPUT logfile=import00.log  REMAP_TABLESPACE=TBS_COL_DATA_NEW:users,TBS_APL_IDX:users REMAP_SCHEMA=APLADMIN:adm_biometria
 	}
 	
 	public static final String sqlldrCommand(String datasource, String ctlFile, String fileName) {
@@ -37,7 +46,7 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] importSqliteWithCsv(String nameFileSql) {
-		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql",".mode csv", ".import " + nameFileSql + "_divipol.csv", ".import " + nameFileSql + "_censo.csv", ".exit" };
+		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql",".mode csv", ".import " + nameFileSql + "_divipol.csv" + " divipol", ".import " + nameFileSql + "_censo.csv" + " censo", ".exit" };
 	}
 	
 	public static final String[] moveFile(String absolutePathFileOrigen, String absolutePathFileFinal) {

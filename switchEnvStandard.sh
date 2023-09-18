@@ -1,0 +1,1 @@
+export PIPELINE_SCHEMA_DB=TYSE
