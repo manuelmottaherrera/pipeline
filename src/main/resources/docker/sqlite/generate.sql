@@ -19,6 +19,17 @@ BEGIN
     END IF;
 END CONVERTIR;
 /
+CREATE OR REPLACE FUNCTION CONVERTIR_CSV(p_valor IN VARCHAR2) RETURN VARCHAR2 AS
+--Si la entrada es null, la deja null. Si tiene valor reemplaza una comilla sencilla por dos comillas sencillas.
+BEGIN
+    IF p_valor IS NULL OR p_valor = '' THEN
+        RETURN NULL;
+    ELSE
+        -- Procesa el valor y retorna el resultado deseado.
+        RETURN '' || REPLACE(p_valor, '''', '''''') || '';
+    END IF;
+END CONVERTIR_CSV;
+/
 CREATE OR REPLACE FUNCTION OFUSCAR_CEDULA (CEDULA IN NUMBER) RETURN NUMBER IS
     CEDULA_OFUSCADA NUMBER;
 BEGIN
@@ -255,7 +266,7 @@ WHERE
     D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND 
     D.MUNICIPIO=' || M.MUNICIPIO ||'
 ORDER BY DM.DIPOCONS) LOOP');
-            DBMS_OUTPUT.PUT_LINE('v_stmt := c.DIPOCONS || '','' || c.dpto || '','' || c.mcpio || '','' || c.zona || '','' || LPAD(c.puesto, 2, ''0'') || '','' || c.tot_cc || '','' || CONVERTIR(c.descripcion) || '','' || CONVERTIR(c.direccion);');
+            DBMS_OUTPUT.PUT_LINE('v_stmt := c.DIPOCONS || '','' || c.dpto || '','' || c.mcpio || '','' || c.zona || '','' || LPAD(c.puesto, 2, ''0'') || '','' || c.tot_cc || '','' || CONVERTIR_CSV(c.descripcion) || '','' || CONVERTIR_CSV(c.direccion);');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
             DBMS_OUTPUT.PUT_LINE('END LOOP;');
             DBMS_OUTPUT.PUT_LINE('END;');
@@ -295,10 +306,10 @@ WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || M.MUNICIPIO |
             DBMS_OUTPUT.PUT_LINE('v_stmt := c.dipocons_puesto || '',''
             || c.mesa || '',''
             || c.cedula || '',''
-            || CONVERTIR(c.pri_nombre) || '',''
-            || CONVERTIR(c.seg_nombre) || '',''
-            || CONVERTIR(c.pri_apellido) || '',''
-            || CONVERTIR(c.seg_apellido) || '',''
+            || CONVERTIR_CSV(c.pri_nombre) || '',''
+            || CONVERTIR_CSV(c.seg_nombre) || '',''
+            || CONVERTIR_CSV(c.pri_apellido) || '',''
+            || CONVERTIR_CSV(c.seg_apellido) || '',''
             || c.genero || '',''
             || c.fech_exp;');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
