@@ -73,6 +73,9 @@ public class DmpController {
 	}
 
 	private void importProcess() throws IOException {
+		for (File compressFile : dmpService.getAllCompressFiles()) {
+			processCompressFile(compressFile);
+		}
 		for (File plainText : dmpService.getAllPlainTextFiles()) {
 			processFile(plainText);
 		}
@@ -81,11 +84,14 @@ public class DmpController {
 		}
 	}
 
+	private void processCompressFile(File compressFile) {
+		dmpService.processCompressFile(compressFile);
+	}
+
 	private void processFile(File plainText) {
 		final String CENSO = "Censo";
 		final String DIVIPOL = "Divipol";
 		final String JURADOS = "Jurados";
-		final String CLAVE_PUESTO = "ClavePuesto";
 		String fileName = plainText.getName();
 		if (fileName.contains(CENSO)) {
 			processCenso(plainText);
@@ -93,15 +99,7 @@ public class DmpController {
 			processDivipol(plainText);
 		} else if (fileName.contains(JURADOS)) {
 			processJurados(plainText);
-		} else if (fileName.contains(CLAVE_PUESTO)) {
-			processClavePuesto(plainText);
 		}
-	}
-
-	private void processClavePuesto(File plainText) {
-		dmpService.moveFileToSqlDirectory(plainText);
-		dmpService.importClavePuesto(plainText);
-		dmpService.cleanSqlloaderProcess(plainText);
 	}
 
 	private void processJurados(File plainText) {

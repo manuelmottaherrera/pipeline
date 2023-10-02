@@ -106,6 +106,11 @@ public class DmpServiceImpl implements DmpService {
 	public File[] getAllPlainTextFiles() {
 		return FileUtil.getFilesFromFolder(inputFolder, ".txt");
 	}
+	
+	@Override
+	public File[] getAllCompressFiles() {
+		return FileUtil.getFilesFromFolder(inputFolder, ".rar");
+	}
 
 	@Override
 	public File[] getAllDmpFiles() {
@@ -204,25 +209,25 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void importCenso(File plainText) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlldrCommand(datasource, censoCtl, plainText.getName()), sqlDirectory, false);
+				ConstantsCommands.sqlldrCommand(datasource, censoCtl, plainText.getName()), sqlDirectory, true);
 	}
 
 	@Override
 	public void importDivipol(File plainText) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlldrCommand(datasource, divipolCtl, plainText.getName()), sqlDirectory, false);
+				ConstantsCommands.sqlldrCommand(datasource, divipolCtl, plainText.getName()), sqlDirectory, true);
 	}
 
 	@Override
 	public void importJurados(File plainText) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlldrCommand(datasource, juradosCtl, plainText.getName()), sqlDirectory, false);
+				ConstantsCommands.sqlldrCommand(datasource, juradosCtl, plainText.getName()), sqlDirectory, true);
 	}
 
 	@Override
-	public void importClavePuesto(File plainText) {
+	public void processCompressFile(File compressFile) {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlldrCommand(datasource, clavePuestoCtl, plainText.getName()), sqlDirectory, false);
+				ConstantsCommands.moveFile(inputFolder + compressFile.getName(), outputFolder), home, true);
 	}
 
 	@Override

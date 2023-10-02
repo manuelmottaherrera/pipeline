@@ -44,7 +44,7 @@ public interface DmpService {
 
 	public void importJurados(File plainText);
 
-	public void importClavePuesto(File plainText);
+	public void processCompressFile(File plainText);
 
 	public void moveAllDbFolderToOutputFolder();
 	
@@ -55,4 +55,6 @@ public interface DmpService {
 	public int getStartImport();
 
 	public void moveFilesToFolders();
+
+	public File[] getAllCompressFiles();
 }
