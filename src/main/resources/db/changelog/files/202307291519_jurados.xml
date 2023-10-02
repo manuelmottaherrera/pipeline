@@ -31,6 +31,9 @@
             <column name="CEDULA" type="NUMBER">
                 <constraints nullable="false" />
             </column>
+            <column name="ID_CARGO" type="NUMBER">
+                <constraints nullable="false" />
+            </column>
             <column name="CARGO" type="VARCHAR2(100)">
                 <constraints nullable="false" />
             </column>
