@@ -42,7 +42,7 @@
             <column name="SEGUNDO_APELLIDO" type="VARCHAR2(80)" />
             <column name="PRIMER_NOMBRE" type="VARCHAR2(80)" />
             <column name="SEGUNDO_NOMBRE" type="VARCHAR2(80)" />
-            <column name="GENERO" type="NUMBER(1)" />
+            <column name="GENERO" type="VARCHAR2(12)" />
             <column name="FECHA_EXPEDICION" type="VARCHAR2(30)" />
         </createTable>
         <addPrimaryKey columnNames="CEDULA" constraintName="CENSO_PK" tableName="CENSO" />

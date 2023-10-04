@@ -5,8 +5,8 @@
 
     <changeSet id="createDivipolTable" author="manuel.motta">
         <createTable tableName="DIVIPOL">
-            <column name="DIPOCONS" type="NUMBER">
-                <constraints nullable="true" />
+            <column name="DIPOCONS" type="NUMBER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="DEPARTAMENTO" type="NUMBER(2)">
                 <constraints nullable="false" />
@@ -27,12 +27,6 @@
                 <constraints nullable="false" />
             </column>
             <column name="PUESTO_DESCRIPCION" type="VARCHAR2(150)">
-                <constraints nullable="false" />
-            </column>
-            <column name="POT_HOMBRE" type="NUMBER(10)">
-                <constraints nullable="false" />
-            </column>
-            <column name="POT_MUJER" type="NUMBER(10)">
                 <constraints nullable="false" />
             </column>
             <column name="TOTAL" type="NUMBER(10)">

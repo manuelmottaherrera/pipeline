@@ -47,11 +47,11 @@ public interface DmpService {
 	public void processCompressFile(File plainText);
 
 	public void moveAllDbFolderToOutputFolder();
-	
+
 	public File[] getAllSqlFiles();
-	
+
 	public int getFinishImport();
-	
+
 	public int getStartImport();
 
 	public void moveFilesToFolders();

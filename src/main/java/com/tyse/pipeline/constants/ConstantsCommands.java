@@ -13,10 +13,10 @@ public class ConstantsCommands {
 				"impdp " + datasource +
 				" DUMPFILE=" + file + 
 				" directory=" + dmpDirectory + 
-				" logfile=import00.log"/* + 
+				" logfile=import00.log" + 
 				" REMAP_TABLESPACE=" + tablespaceClient + ":users," + tablespaceIndex + ":users" + 
 				" REMAP_SCHEMA=" + userClient + ":" + userDb
-				*/
+				
 			};
 		//impdp adm_biometria DUMPFILE=main_dump.dmp directory=DMP_INPUT logfile=import00.log  REMAP_TABLESPACE=TBS_COL_DATA_NEW:users,TBS_APL_IDX:users REMAP_SCHEMA=APLADMIN:adm_biometria
 	}

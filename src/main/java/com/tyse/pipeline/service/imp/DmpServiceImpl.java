@@ -3,7 +3,6 @@ package com.tyse.pipeline.service.imp;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -149,7 +148,7 @@ public class DmpServiceImpl implements DmpService {
 	@Override
 	public void exportToSqlite() {
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, false);
+				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, true);
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory,
 				true);
