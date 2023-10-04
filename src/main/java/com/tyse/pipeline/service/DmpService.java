@@ -2,6 +2,7 @@ package com.tyse.pipeline.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 import com.tyse.pipeline.domain.entities.Dmp;
 
@@ -22,7 +23,7 @@ public interface DmpService {
 
 	public void deleteNumberOfLastLinesSqliteFile(Dmp dmp, int numberOfLines);
 
-	public void importSqlite(String nameFile);
+	public CompletableFuture<Void> importSqlite(String nameFile);
 
 	public Dmp findById(Short id);
 

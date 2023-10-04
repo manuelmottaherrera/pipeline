@@ -3,6 +3,7 @@ package com.tyse.pipeline.service.imp;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -183,7 +184,7 @@ public class DmpServiceImpl implements DmpService {
 
 	@Override
 	@Async
-	public void importSqlite(String nameFile) {
+	public CompletableFuture<Void> importSqlite(String nameFile) {
 		startImport = getStartImport() + 1;
 		String nameWithoutExtension = nameFile.split("\\.")[0];
 		if (nameWithoutExtension.endsWith("c")) {
@@ -199,6 +200,7 @@ public class DmpServiceImpl implements DmpService {
 		compressSqliteFile(nameWithoutExtension + ".db");
 		deleteSqlFile(nameWithoutExtension + ".db");
 		finishImport = getFinishImport() + 1;
+		return null;
 	}
 
 	private void compressSqliteFile(String nameFile) {

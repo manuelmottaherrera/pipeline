@@ -2,6 +2,9 @@ package com.tyse .pipeline.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,23 +39,17 @@ public class DmpController {
 
 	private void exportProcess() {
 		dmpService.exportToSqlite();
+		List<CompletableFuture<Void>> futuresList = new ArrayList<>();
 		for (File fileSql : dmpService.getAllSqlFiles()) {
-			dmpService.importSqlite(fileSql.getName());
+			futuresList.add(dmpService.importSqlite(fileSql.getName()));
 		}
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		while (dmpService.getStartImport() != dmpService.getFinishImport()) {
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(
+	            futuresList.toArray(new CompletableFuture[0])
+		        );
+		combinedFuture.join();
+		
+		
+		
 		dmpService.moveFilesToFolders();
 		//dmpService.generateDbSqlite();
 		//dmpService.deleteSqlFiles();
