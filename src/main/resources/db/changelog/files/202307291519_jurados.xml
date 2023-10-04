@@ -4,35 +4,38 @@
 
     <changeSet id="createJuradosTable" author="manuel.motta">
         <createTable tableName="JURADOS">
+            <column name="DEPARTAMENTO" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MUNICIPIO" type="NUMBER(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="ZONA" type="NUMBER(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PUESTO" type="VARCHAR2(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="DEPARTAMENTO_DESCRIPCION" type="VARCHAR2(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MUNICIPIO_DESCRIPCION" type="VARCHAR2(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="PUESTO_DESCRIPCION" type="VARCHAR2(150)">
+                <constraints nullable="false" />
+            </column>
+            <column name="MESA" type="NUMBER">
+                <constraints nullable="false" />
+            </column>
             <column name="CEDULA" type="NUMBER">
                 <constraints nullable="false" />
             </column>
-            <column name="APELLIDOS" type="VARCHAR(60)">
+            <column name="ID_CARGO" type="NUMBER">
                 <constraints nullable="false" />
             </column>
-            <column name="NOMBRES" type="VARCHAR(60)">
+            <column name="CARGO" type="VARCHAR2(100)">
                 <constraints nullable="false" />
-            </column>
-            <column name="NIVEL" type="NUMBER(2)">
-                <constraints nullable="false" />
-            </column>
-            <column name="PARTIDO" type="CHAR(2)">
-                <constraints nullable="false" />
-            </column>
-            <column name="ZONA" type="CHAR(3)">
-                <constraints nullable="false" />
-            </column>
-            <column name="PUESTO" type="CHAR(3)">
-                <constraints nullable="false" />
-            </column>
-            <column name="JURADO" type="NUMBER(3)">
-                <constraints nullable="false" />
-            </column>
-            <column name="MESA" type="CHAR(3)">
-                <constraints nullable="true" />
-            </column>
-            <column name="CARGO" type="CHAR(2)">
-                <constraints nullable="true" />
             </column>
         </createTable>
         <addPrimaryKey columnNames="CEDULA" constraintName="JURADOS_IDX1" tableName="JURADOS" />
