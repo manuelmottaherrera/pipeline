@@ -103,7 +103,7 @@ END encriptar;
 
 
 
---SPOOL generateAllSql.sql
+SPOOL generateAllSql.sql
 DECLARE
     v_departamento VARCHAR2(2);
     v_municipio VARCHAR2(3);
@@ -111,7 +111,7 @@ DECLARE
     v_puesto VARCHAR(2);
     v_file_name VARCHAR2(30);
     v_total_cedulas NUMBER := 0;
-    v_folder VARCHAR2 := 'db2/';
+    v_folder VARCHAR2(10) := 'db/';
 BEGIN
     
     FOR D IN (select DISTINCT DEPARTAMENTO, DEPARTAMENTO_DESCRIPCION from DIVIPOL ORDER BY DEPARTAMENTO) LOOP

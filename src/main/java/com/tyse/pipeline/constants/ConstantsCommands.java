@@ -71,6 +71,6 @@ public class ConstantsCommands {
 	}
 
 	public static String[] splitFile(String generateSqliteFiles, String nameOfOutputFile) {
-			return new String[] { "bash", "-c", "awk 'BEGIN {filename = \"" + nameOfOutputFile + ".sql\"} /EXIT/ {print $0 > filename; close(filename); filename = \"" + nameOfOutputFile + "\" (++counter + 1) \".sql\"; next} {print > filename}' " + generateSqliteFiles};
+			return new String[] { "bash", "-c", "awk 'BEGIN {filename = \"" + nameOfOutputFile + "1.sql\"} /EXIT/ {print $0 > filename; close(filename); filename = \"" + nameOfOutputFile + "\" (++counter + 1) \".sql\"; next} {print > filename}' " + generateSqliteFiles};
 	}
 }
