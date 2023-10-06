@@ -3,6 +3,7 @@ package com.tyse .pipeline.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -39,6 +40,18 @@ public class DmpController {
 
 	private void exportProcess() {
 		dmpService.exportToSqlite();
+		
+		List<CompletableFuture<Void>> generateFutureList = new ArrayList<>();
+		for (File outputFile : dmpService.getOutputsFiles()) {
+			generateFutureList.add(dmpService.executeOutputFile(outputFile));
+		}
+		
+		CompletableFuture<Void> combinedGenerateFuture = CompletableFuture.allOf(
+				generateFutureList.toArray(new CompletableFuture[0])
+				);
+		combinedGenerateFuture.join();
+				
+		
 		List<CompletableFuture<Void>> futuresList = new ArrayList<>();
 		for (File fileSql : dmpService.getAllSqlFiles()) {
 			futuresList.add(dmpService.importSqlite(fileSql.getName()));

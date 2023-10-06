@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,4 +79,21 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+	
+	public static List<File> getOutputFileSQLs(String directoryPath, String startsWith, String endsWith) {
+	    File directory = new File(directoryPath);
+	    List<File> matchingFiles = new ArrayList<>();
+
+	    if (directory.exists() && directory.isDirectory()) {
+	        File[] files = directory.listFiles((dir, name) -> name.startsWith(startsWith) && name.endsWith(endsWith));
+
+	        if (files != null) {
+	            for (File file : files) {
+	                matchingFiles.add(file);
+	            }
+	        }
+	    }
+
+	    return matchingFiles;
+	}
 }

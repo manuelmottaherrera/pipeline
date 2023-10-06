@@ -3,6 +3,7 @@ package com.tyse.pipeline.service.imp;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -87,6 +88,9 @@ public class DmpServiceImpl implements DmpService {
 
 	@Value("${pipeline.user-db}")
 	String userDb;
+	
+	@Value("${pipeline.sqlite.outputfile}")
+	String outputFile;
 
 	@Override
 	public int getFinishImport() {
@@ -151,8 +155,7 @@ public class DmpServiceImpl implements DmpService {
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generatePlSql), sqliteDirectory, true);
 		CommandLineExecutionUtil.executeCommand(
-				ConstantsCommands.sqlPlusCommand(datasource, sqliteDirectory + generateSqliteFiles), sqliteDirectory,
-				true);
+				ConstantsCommands.splitFile(generateSqliteFiles, outputFile) , sqliteDirectory, false);
 	}
 
 	@Override
@@ -280,6 +283,20 @@ public class DmpServiceImpl implements DmpService {
 					ConstantsCommands.moveFile(sqliteDirectoryDb + file.getName(), sqliteDirectoryDb + dptoCode + "/"),
 					home, true);
 		}
+	}
+
+	@Override
+	public List<File> getOutputsFiles() {
+		return FileUtil.getOutputFileSQLs(sqliteDirectory, outputFile, ".sql");
+	}
+
+	@Override
+	@Async
+	public CompletableFuture<Void> executeOutputFile(File outputFileSql) {
+		CommandLineExecutionUtil.executeCommand(
+				ConstantsCommands.sqlPlusCommand(datasource, outputFileSql.getName()), sqliteDirectory,
+				true);
+		return null;
 	}
 
 }

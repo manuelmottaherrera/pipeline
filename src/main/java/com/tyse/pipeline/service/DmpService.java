@@ -2,6 +2,7 @@ package com.tyse.pipeline.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.tyse.pipeline.domain.entities.Dmp;
@@ -58,4 +59,8 @@ public interface DmpService {
 	public void moveFilesToFolders();
 
 	public File[] getAllCompressFiles();
+
+	public List<File> getOutputsFiles();
+
+	public CompletableFuture<Void> executeOutputFile(File outputFile);
 }

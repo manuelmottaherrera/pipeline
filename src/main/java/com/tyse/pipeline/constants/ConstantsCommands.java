@@ -47,7 +47,15 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] importSqliteWithCsv(String nameFileSql) {
-		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql",".mode csv", ".import " + nameFileSql + "_divipol.csv" + " divipol", ".import " + nameFileSql + "_censo.csv" + " censo", ".exit" };
+		return new String[] { SQLITE3, 
+				nameFileSql + ".db", 
+				".read " + nameFileSql + ".sql",
+				".mode csv", 
+				".import " + nameFileSql + "_divipol.csv" + " divipol", 
+				".import " + nameFileSql + "_censo.csv" + " censo",
+				"UPDATE censo SET seg_nombre = NULL WHERE seg_nombre = '';",
+				"UPDATE censo SET seg_apellido = NULL WHERE seg_apellido = '';",
+				".exit" };
 	}
 	
 	public static final String[] moveFile(String absolutePathFileOrigen, String absolutePathFileFinal) {
@@ -60,5 +68,9 @@ public class ConstantsCommands {
 	
 	public static final String[] compressFile(String fileName) {
 		return new String[] {"zip", fileName.split("\\.")[0] + ".zip", fileName };
+	}
+
+	public static String[] splitFile(String generateSqliteFiles, String nameOfOutputFile) {
+			return new String[] { "bash", "-c", "awk 'BEGIN {filename = \"" + nameOfOutputFile + ".sql\"} /EXIT/ {print $0 > filename; close(filename); filename = \"" + nameOfOutputFile + "\" (++counter + 1) \".sql\"; next} {print > filename}' " + generateSqliteFiles};
 	}
 }
