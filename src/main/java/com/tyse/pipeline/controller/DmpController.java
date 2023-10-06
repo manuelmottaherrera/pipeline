@@ -39,7 +39,7 @@ public class DmpController {
 	}
 
 	private void exportProcess() {
-		dmpService.exportToSqlite();
+		//dmpService.exportToSqlite();
 		
 		List<CompletableFuture<Void>> generateFutureList = new ArrayList<>();
 		for (File outputFile : dmpService.getOutputsFiles()) {
