@@ -295,7 +295,7 @@ public class DmpServiceImpl implements DmpService {
 	public CompletableFuture<Void> executeOutputFile(File outputFileSql) {
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, outputFileSql.getName()), sqliteDirectory,
-				false);
+				true);
 		return null;
 	}
 
