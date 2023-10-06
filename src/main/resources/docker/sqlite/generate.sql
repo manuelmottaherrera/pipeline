@@ -1,4 +1,4 @@
--- Encoding: ISO-8859-1
+
 SET SERVEROUTPUT ON;
 SET VERIFY OFF;
 SET HEADING OFF;
@@ -103,7 +103,7 @@ END encriptar;
 
 
 
-SPOOL generateAllSql.sql
+--SPOOL generateAllSql.sql
 DECLARE
     v_departamento VARCHAR2(2);
     v_municipio VARCHAR2(3);
@@ -111,30 +111,23 @@ DECLARE
     v_puesto VARCHAR(2);
     v_file_name VARCHAR2(30);
     v_total_cedulas NUMBER := 0;
+    v_folder VARCHAR2 := 'db2/';
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
-    DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
-    DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
-    DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
-    DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
-    DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
-    DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
-    DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
+    
     FOR D IN (select DISTINCT DEPARTAMENTO, DEPARTAMENTO_DESCRIPCION from DIVIPOL ORDER BY DEPARTAMENTO) LOOP
         v_departamento := LPAD(D.DEPARTAMENTO, 2, '0');
-        --DIVIMOVIL DPTO
-        INSERT INTO DIVIMOVIL (  DEPARTAMENTO,                DESCRIPCION)
-                       VALUES (D.DEPARTAMENTO, D.DEPARTAMENTO_DESCRIPCION);
-        COMMIT;
         FOR M IN (SELECT DISTINCT MUNICIPIO, MUNICIPIO_DESCRIPCION FROM DIVIPOL WHERE DEPARTAMENTO=D.DEPARTAMENTO ORDER BY MUNICIPIO) LOOP
             v_municipio := LPAD(M.MUNICIPIO, 3, '0');
-            --DIVIMOVIL MCPIO
-            INSERT INTO DIVIMOVIL ( DEPARTAMENTO,   MUNICIPIO,        DESCRIPCION)
-                        VALUES   (D.DEPARTAMENTO, M.MUNICIPIO, M.MUNICIPIO_DESCRIPCION);
-            COMMIT;
-
-            v_file_name := 'db/' || v_departamento || v_municipio || 'hj.sql';
+            v_file_name := v_folder || v_departamento || v_municipio || 'hj.sql';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
+            DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
             DBMS_OUTPUT.PUT_LINE('DECLARE');
             DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
@@ -185,21 +178,24 @@ ORDER BY D.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('END;');
             DBMS_OUTPUT.PUT_LINE('/');
             DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+            DBMS_OUTPUT.PUT_LINE('EXIT');
             FOR Z IN (SELECT DISTINCT ZONA FROM DIVIPOL WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO ORDER BY ZONA) LOOP
                 v_zona := LPAD(Z.ZONA, 2, '0');
-                --DIVIMOVIL ZONA
-                INSERT INTO DIVIMOVIL ( DEPARTAMENTO,   MUNICIPIO,   ZONA,       DESCRIPCION)
-                            VALUES   (D.DEPARTAMENTO, M.MUNICIPIO, Z.ZONA, 'ZONA ' || v_zona);
-                COMMIT;
+                
                 FOR P IN (SELECT DISTINCT PUESTO, PUESTO_DESCRIPCION FROM DIVIPOL WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO AND ZONA = Z.ZONA ORDER BY PUESTO) LOOP
                     v_puesto := LPAD(P.PUESTO, 2, '0');
                     SELECT COUNT(CEDULA) INTO v_total_cedulas FROM CENSO WHERE DEPARTAMENTO = D.DEPARTAMENTO AND MUNICIPIO = M.MUNICIPIO AND ZONA = Z.ZONA AND PUESTO = P.PUESTO;
-                    --DIVIMOVIL PUESTO
-                    INSERT INTO DIVIMOVIL ( DEPARTAMENTO,   MUNICIPIO,   ZONA,                                                                                   PUESTO,          DESCRIPCION,          TOT_CC)
-                                VALUES   (D.DEPARTAMENTO, M.MUNICIPIO, Z.ZONA, CASE WHEN REGEXP_LIKE(P.PUESTO, '^[0-9]$') THEN P.PUESTO ELSE LPAD(P.PUESTO, 2, '0') END, P.PUESTO_DESCRIPCION, v_total_cedulas);
-                    COMMIT;
-                    v_file_name := 'db/' || v_departamento || v_municipio || v_zona || v_puesto || 'h.sql';
+                    
+                    v_file_name := v_folder || v_departamento || v_municipio || v_zona || v_puesto || 'h.sql';
                     DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+                    DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
+                    DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
+                    DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
+                    DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
+                    DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
+                    DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
+                    DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
+                    DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
                     DBMS_OUTPUT.PUT_LINE('DECLARE');
                     DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
                     DBMS_OUTPUT.PUT_LINE('BEGIN');
@@ -223,10 +219,19 @@ ORDER BY D.DIPOCONS) LOOP');
                     DBMS_OUTPUT.PUT_LINE('END;');
                     DBMS_OUTPUT.PUT_LINE('/');
                     DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+                    DBMS_OUTPUT.PUT_LINE('EXIT');
                 END LOOP;
             END LOOP;
-            v_file_name := 'db/' || v_departamento || v_municipio || 'c.sql';
+            v_file_name := v_folder || v_departamento || v_municipio || 'c.sql';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
+            DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
             DBMS_OUTPUT.PUT_LINE('DECLARE');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(''CREATE TABLE divipol (dipocons INT,dpto INT NOT NULL DEFAULT -1,mcpio INT NOT NULL DEFAULT -1,zona INT NOT NULL DEFAULT -1, puesto VARCHAR(2) NOT NULL DEFAULT ''''-1'''', tot_cc INT NOT NULL DEFAULT -1, descripcion VARCHAR (200), direccion VARCHAR (200), PRIMARY KEY (dipocons));'');');
@@ -234,10 +239,18 @@ ORDER BY D.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('END;');
             DBMS_OUTPUT.PUT_LINE('/');
             DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+            DBMS_OUTPUT.PUT_LINE('EXIT');
 
-
-            v_file_name := 'db/' || v_departamento || v_municipio || 'c_divipol.csv';
+            v_file_name := v_folder || v_departamento || v_municipio || 'c_divipol.csv';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
+            DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
             DBMS_OUTPUT.PUT_LINE('DECLARE');
             DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
@@ -272,8 +285,17 @@ ORDER BY DM.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('END;');
             DBMS_OUTPUT.PUT_LINE('/');
             DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
-            v_file_name := 'db/' || v_departamento || v_municipio || 'c_censo.csv';
+            DBMS_OUTPUT.PUT_LINE('EXIT');
+            v_file_name := v_folder || v_departamento || v_municipio || 'c_censo.csv';
             DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
+            DBMS_OUTPUT.PUT_LINE('SET SERVEROUTPUT ON;');
+            DBMS_OUTPUT.PUT_LINE('SET VERIFY OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET HEADING OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET ECHO OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET LONG 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET LINESIZE 32767;');
+            DBMS_OUTPUT.PUT_LINE('SET FEEDBACK OFF;');
+            DBMS_OUTPUT.PUT_LINE('SET TRIMSPOOL ON;');
             DBMS_OUTPUT.PUT_LINE('DECLARE');
             DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
@@ -317,9 +339,10 @@ WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || M.MUNICIPIO |
             DBMS_OUTPUT.PUT_LINE('END;');
             DBMS_OUTPUT.PUT_LINE('/');
             DBMS_OUTPUT.PUT_LINE('SPOOL OFF;');
+            DBMS_OUTPUT.PUT_LINE('EXIT');
         END LOOP;
     END LOOP;
-    v_file_name := 'db/' || 'divimovil.txt';
+    v_file_name := v_folder || 'divimovil.txt';
     DBMS_OUTPUT.PUT_LINE('SET LINESIZE 75');
     DBMS_OUTPUT.PUT_LINE('SPOOL ' || v_file_name);
     DBMS_OUTPUT.PUT_LINE('DECLARE');
