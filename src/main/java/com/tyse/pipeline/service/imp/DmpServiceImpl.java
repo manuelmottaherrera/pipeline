@@ -296,6 +296,7 @@ public class DmpServiceImpl implements DmpService {
 		CommandLineExecutionUtil.executeCommand(
 				ConstantsCommands.sqlPlusCommand(datasource, outputFileSql.getName()), sqliteDirectory,
 				true);
+		CommandLineExecutionUtil.executeCommand(ConstantsCommands.deleteFile(outputFileSql.getName()), sqliteDirectory, true);
 		return null;
 	}
 
