@@ -17,8 +17,8 @@ public class AsyncConfig implements AsyncConfigurer {
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(20);  // número inicial de hilos
-        executor.setMaxPoolSize(50);  // número máximo de hilos
-        executor.setQueueCapacity(1650);  // capacidad de la cola de espera
+        executor.setMaxPoolSize(64);  // número máximo de hilos
+        executor.setQueueCapacity(2000);  // capacidad de la cola de espera
         executor.setThreadNamePrefix("MyAsyncThread-");  // prefijo para los nombres de hilos
         executor.initialize();
         return executor;
