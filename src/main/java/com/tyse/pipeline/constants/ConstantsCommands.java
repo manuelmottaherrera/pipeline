@@ -54,8 +54,8 @@ public class ConstantsCommands {
 				".mode csv", 
 				".import " + nameFileSql + "_divipol.csv" + " divipol", 
 				".import " + nameFileSql + "_censo.csv" + " censo",
-				"UPDATE censo SET seg_nombre = NULL WHERE seg_nombre = '';",
-				"UPDATE censo SET seg_apellido = NULL WHERE seg_apellido = '';",
+				"UPDATE censo SET seg_nombre = NULL WHERE seg_nombre = ' ';",
+				"UPDATE censo SET seg_apellido = NULL WHERE seg_apellido = ' ';",
 				".exit" };
 	}
 	
