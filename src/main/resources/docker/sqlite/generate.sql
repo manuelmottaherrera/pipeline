@@ -19,43 +19,7 @@ DECLARE
     v_folder VARCHAR2(10) := 'db/';
 BEGIN
     
-        FOR D IN (SELECT 
-                DEPARTAMENTO,
-                MUNICIPIO
-            FROM CENSO
-            WHERE 
-                INSTR(DEPARTAMENTO_NOMBRE, ',') > 0 OR
-                INSTR(MUNICIPIO_NOMBRE, ',') > 0 OR
-                INSTR(PUESTO_DESCRIPCION, ',') > 0 OR
-                INSTR(DIRECCION, ',') > 0 OR
-                INSTR(PRIMER_APELLIDO, ',') > 0 OR
-                INSTR(SEGUNDO_APELLIDO, ',') > 0 OR
-                INSTR(PRIMER_NOMBRE, ',') > 0 OR
-                INSTR(SEGUNDO_NOMBRE, ',') > 0
-            GROUP BY 
-                DEPARTAMENTO, 
-                MUNICIPIO
-
-            UNION
-
-            -- Segunda consulta sobre la tabla DIVIPOL
-            SELECT 
-                DEPARTAMENTO,
-                MUNICIPIO
-            FROM DIVIPOL
-            WHERE 
-                INSTR(DEPARTAMENTO_DESCRIPCION, ',') > 0 OR
-                INSTR(MUNICIPIO_DESCRIPCION, ',') > 0 OR
-                INSTR(PUESTO_DESCRIPCION, ',') > 0
-            GROUP BY 
-                DEPARTAMENTO, 
-                MUNICIPIO
-
-            -- Ordenar el resultado combinado
-            ORDER BY 
-                DEPARTAMENTO, 
-                MUNICIPIO
-    ) LOOP
+        FOR D IN (SELECT DISTINCT DEPARTAMENTO, MUNICIPIO FROM DIVIPOL ORDER BY DEPARTAMENTO, MUNICIPIO;) LOOP
             v_departamento := LPAD(D.DEPARTAMENTO, 2, '0');
             v_municipio := LPAD(D.MUNICIPIO, 3, '0');
             v_file_name := v_folder || v_departamento || v_municipio || 'c.sql';
@@ -99,7 +63,7 @@ SELECT
     D.PUESTO as puesto, 
     DM.TOT_CC AS tot_cc, 
     DM.DESCRIPCION AS descripcion, 
-    C.DIRECCION as direccion 
+    MAX(C.DIRECCION) as direccion 
 FROM DIVIPOL D 
     JOIN DIVIMOVIL DM ON 
         D.DEPARTAMENTO=DM.DEPARTAMENTO AND 
