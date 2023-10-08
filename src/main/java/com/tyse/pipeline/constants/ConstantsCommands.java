@@ -50,6 +50,7 @@ public class ConstantsCommands {
 		return new String[] { SQLITE3, 
 				nameFileSql + ".db", 
 				".read " + nameFileSql + ".sql",
+				"PRAGMA double_quote = 1;",
 				".mode csv", 
 				".import " + nameFileSql + "_divipol.csv" + " divipol", 
 				".import " + nameFileSql + "_censo.csv" + " censo",
