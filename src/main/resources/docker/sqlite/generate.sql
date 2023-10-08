@@ -113,7 +113,7 @@ FROM DIVIPOL D
         C.PUESTO=D.PUESTO
 WHERE 
     D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND 
-    D.MUNICIPIO=' || M.MUNICIPIO ||'
+    D.MUNICIPIO=' || D.MUNICIPIO ||'
 ORDER BY DM.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('v_stmt := c.DIPOCONS || '','' || c.dpto || '','' || c.mcpio || '','' || c.zona || '','' || LPAD(c.puesto, 2, ''0'') || '','' || c.tot_cc || '',"'' || CONVERTIR_CSV(c.descripcion) || ''","'' || CONVERTIR_CSV(c.direccion) || ''"'';');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
@@ -160,7 +160,7 @@ FROM CENSO C
         C.MUNICIPIO = DM.MUNICIPIO AND
         C.ZONA = DM.ZONA AND
         C.PUESTO = DM.PUESTO
-WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || M.MUNICIPIO || ' ORDER BY DM.DIPOCONS) LOOP');
+WHERE D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND D.MUNICIPIO=' || D.MUNICIPIO || ' ORDER BY DM.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('v_stmt := c.dipocons_puesto || '',''
             || c.mesa || '',''
             || c.cedula || '',"''
