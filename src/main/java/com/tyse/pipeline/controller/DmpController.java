@@ -51,7 +51,7 @@ public class DmpController {
 				);
 		combinedGenerateFuture.join();
 				
-		
+		/*
 		List<CompletableFuture<Void>> futuresList = new ArrayList<>();
 		for (File fileSql : dmpService.getAllSqlFiles()) {
 			futuresList.add(dmpService.importSqlite(fileSql.getName()));
@@ -61,13 +61,14 @@ public class DmpController {
 		        );
 		combinedFuture.join();
 		
-		
-		
 		dmpService.moveFilesToFolders();
+		dmpService.moveAllDbFolderToOutputFolder();
+		*/
+		
+		
 		//dmpService.generateDbSqlite();
 		//dmpService.deleteSqlFiles();
 		//dmpService.deleteAllOfOutputDirectory();
-		dmpService.moveAllDbFolderToOutputFolder();
 //		dmpService.changeNameSqliteFile(dmpSaved);
 //		dmpService.deleteNumberOfLastLinesSqliteFile(dmpSaved, 2);
 //		dmpService.createDbSqlite(dmpSaved);
