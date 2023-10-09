@@ -19,7 +19,7 @@ DECLARE
     v_folder VARCHAR2(10) := 'db/';
 BEGIN
     
-        FOR D IN (SELECT DISTINCT DEPARTAMENTO, MUNICIPIO FROM DIVIPOL ORDER BY DEPARTAMENTO, MUNICIPIO;) LOOP
+        FOR D IN (SELECT DISTINCT DEPARTAMENTO, MUNICIPIO FROM DIVIPOL ORDER BY DEPARTAMENTO, MUNICIPIO) LOOP
             v_departamento := LPAD(D.DEPARTAMENTO, 2, '0');
             v_municipio := LPAD(D.MUNICIPIO, 3, '0');
             v_file_name := v_folder || v_departamento || v_municipio || 'c.sql';
@@ -55,20 +55,20 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('v_stmt CLOB;');
             DBMS_OUTPUT.PUT_LINE('BEGIN');
             DBMS_OUTPUT.PUT_LINE('FOR C IN (
-SELECT 
-    DISTINCT DM.DIPOCONS AS DIPOCONS, 
-    D.DEPARTAMENTO AS dpto, 
-    D.MUNICIPIO AS mcpio, 
-    D.ZONA AS zona, 
-    D.PUESTO as puesto, 
-    DM.TOT_CC AS tot_cc, 
-    DM.DESCRIPCION AS descripcion, 
-    MAX(C.DIRECCION) as direccion 
-FROM DIVIPOL D 
-    JOIN DIVIMOVIL DM ON 
-        D.DEPARTAMENTO=DM.DEPARTAMENTO AND 
-        D.MUNICIPIO=DM.MUNICIPIO AND 
-        D.ZONA=DM.ZONA AND 
+SELECT
+    DM.DIPOCONS AS DIPOCONS,
+    D.DEPARTAMENTO AS dpto,
+    D.MUNICIPIO AS mcpio,
+    D.ZONA AS zona,
+    D.PUESTO as puesto,
+    DM.TOT_CC AS tot_cc,
+    DM.DESCRIPCION AS descripcion,
+    MAX(C.DIRECCION) as direccion
+FROM DIVIPOL D
+    JOIN DIVIMOVIL DM ON
+        D.DEPARTAMENTO=DM.DEPARTAMENTO AND
+        D.MUNICIPIO=DM.MUNICIPIO AND
+        D.ZONA=DM.ZONA AND
         D.PUESTO=DM.PUESTO
     JOIN CENSO C ON
         C.DEPARTAMENTO=D.DEPARTAMENTO AND
@@ -78,6 +78,14 @@ FROM DIVIPOL D
 WHERE 
     D.DEPARTAMENTO=' || D.DEPARTAMENTO || ' AND 
     D.MUNICIPIO=' || D.MUNICIPIO ||'
+GROUP BY 
+    DM.DIPOCONS,
+    D.DEPARTAMENTO,
+    D.MUNICIPIO,
+    D.ZONA,
+    D.PUESTO,
+    DM.TOT_CC,
+    DM.DESCRIPCION
 ORDER BY DM.DIPOCONS) LOOP');
             DBMS_OUTPUT.PUT_LINE('v_stmt := c.DIPOCONS || '','' || c.dpto || '','' || c.mcpio || '','' || c.zona || '','' || LPAD(c.puesto, 2, ''0'') || '','' || c.tot_cc || '',"'' || CONVERTIR_CSV(c.descripcion) || ''","'' || CONVERTIR_CSV(c.direccion) || ''"'';');
             DBMS_OUTPUT.PUT_LINE('DBMS_OUTPUT.PUT_LINE(v_stmt);');
