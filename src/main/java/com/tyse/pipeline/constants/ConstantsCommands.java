@@ -52,8 +52,8 @@ public class ConstantsCommands {
 				".read " + nameFileSql + ".sql",
 				"PRAGMA double_quote = 1;",
 				".mode csv", 
-				".import --skip 1 " + nameFileSql + "_divipol.csv" + " divipol", 
-				".import --skip 1 " + nameFileSql + "_censo.csv" + " censo",
+				".import " + nameFileSql + "_divipol.csv" + " divipol", 
+				".import " + nameFileSql + "_censo.csv" + " censo",
 				"UPDATE censo SET seg_nombre = NULL WHERE seg_nombre = ' ';",
 				"UPDATE censo SET seg_apellido = NULL WHERE seg_apellido = ' ';",
 				".exit" };
