@@ -43,12 +43,12 @@ public class ConstantsCommands {
 	}
 
 	public static final String[] importSqlite(String nameFileSql) {
-		return new String[] { "bash", "-c", SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
+		return new String[] { "bash", "-c", SQLITE3 + nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
 	}
 	
 	public static final String[] importSqliteWithCsv(String nameFileSql) {
-		return new String[] { "bash", "-c", SQLITE3, 
-				nameFileSql + ".db", 
+		return new String[] { "bash", "-c", 
+				SQLITE3 + nameFileSql + ".db", 
 				".read " + nameFileSql + ".sql",
 				"PRAGMA double_quote = 1;",
 				".mode csv", 
