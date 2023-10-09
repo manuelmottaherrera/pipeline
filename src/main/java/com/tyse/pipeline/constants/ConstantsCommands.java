@@ -64,11 +64,11 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] deleteFile(String absoluteFileName) {
-		return new String[] {"bash", "-c", "rm", absoluteFileName};
+		return new String[] {"rm", absoluteFileName};
 	}
 	
 	public static final String[] compressFile(String fileName) {
-		return new String[] {"bash", "-c", "zip", fileName.split("\\.")[0] + ".zip", fileName };
+		return new String[] {"zip", fileName.split("\\.")[0] + ".zip", fileName };
 	}
 
 	public static String[] splitFile(String generateSqliteFiles, String nameOfOutputFile) {
