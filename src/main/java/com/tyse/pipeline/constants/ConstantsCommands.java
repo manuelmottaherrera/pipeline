@@ -47,7 +47,7 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] importSqliteWithCsv(String nameFileSql) {
-		return new String[] { SQLITE3, 
+		return new String[] { "bash", "-c", SQLITE3, 
 				nameFileSql + ".db", 
 				".read " + nameFileSql + ".sql",
 				"PRAGMA double_quote = 1;",
