@@ -34,7 +34,7 @@ public class ConstantsCommands {
 	}
 
 	public static final String[] runInitScript(String nameDb, String initScriptFile) {
-		return new String[] { SQLITE3, nameDb + ".db", ".read " + initScriptFile, ".exit" };
+		return new String[] { "bash", "-c", SQLITE3, nameDb + ".db", ".read " + initScriptFile, ".exit" };
 	}
 
 	public static final String[] deleteNumberOfLines(String nameSqliteFile, int linesToDelete) {
@@ -43,7 +43,7 @@ public class ConstantsCommands {
 	}
 
 	public static final String[] importSqlite(String nameFileSql) {
-		return new String[] { SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
+		return new String[] { "bash", "-c", SQLITE3, nameFileSql + ".db", ".read " + nameFileSql + ".sql", ".exit" };
 	}
 	
 	public static final String[] importSqliteWithCsv(String nameFileSql) {
@@ -64,11 +64,11 @@ public class ConstantsCommands {
 	}
 	
 	public static final String[] deleteFile(String absoluteFileName) {
-		return new String[] {"rm", absoluteFileName};
+		return new String[] {"bash", "-c", "rm", absoluteFileName};
 	}
 	
 	public static final String[] compressFile(String fileName) {
-		return new String[] {"zip", fileName.split("\\.")[0] + ".zip", fileName };
+		return new String[] {"bash", "-c", "zip", fileName.split("\\.")[0] + ".zip", fileName };
 	}
 
 	public static String[] splitFile(String generateSqliteFiles, String nameOfOutputFile) {
